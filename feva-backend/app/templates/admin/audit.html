@@ -1,0 +1,665 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>Audit Log</h2>
+    <p>View system audit trail with user actions and data changes</p>
+</div>
+
+<!-- Filters -->
+<div class="card" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 20px;">Filters</h3>
+    
+    <div class="filter-grid">
+        <div class="form-group">
+            <label for="userFilter">User</label>
+            <select id="userFilter" onchange="applyFilters()">
+                <option value="">All Users</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="operationFilter">Operation</label>
+            <select id="operationFilter" onchange="applyFilters()">
+                <option value="">All Operations</option>
+                <option value="create_user">Create User</option>
+                <option value="update_user">Update User</option>
+                <option value="reset_password">Reset Password</option>
+                <option value="deactivate_user">Deactivate User</option>
+                <option value="create_dropdown">Create Dropdown</option>
+                <option value="update_dropdown">Update Dropdown</option>
+                <option value="delete_dropdown">Delete Dropdown</option>
+                <option value="upload_shapefile">Upload Shapefile</option>
+                <option value="activate_shapefile">Activate Shapefile</option>
+                <option value="approve_record">Approve Record</option>
+                <option value="reject_record">Reject Record</option>
+                <option value="create_export">Create Export</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="entityTypeFilter">Entity Type</label>
+            <select id="entityTypeFilter" onchange="applyFilters()">
+                <option value="">All Entity Types</option>
+                <option value="user">User</option>
+                <option value="dropdown_config">Dropdown Config</option>
+                <option value="shapefile_version">Shapefile Version</option>
+                <option value="building">Building</option>
+                <option value="street">Street</option>
+                <option value="export_task">Export Task</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="dateFromFilter">Date From</label>
+            <input type="date" id="dateFromFilter" onchange="applyFilters()">
+        </div>
+        
+        <div class="form-group">
+            <label for="dateToFilter">Date To</label>
+            <input type="date" id="dateToFilter" onchange="applyFilters()">
+        </div>
+        
+        <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%;">
+                Clear Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Audit Log Table -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">Audit Entries</h3>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="totalCount" style="font-size: 14px; color: #666;">-</span>
+            <button class="btn btn-secondary" onclick="loadAuditLog()" style="padding: 8px 16px;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <table id="auditLogTable">
+        <thead>
+            <tr>
+                <th style="width: 180px;">Timestamp</th>
+                <th style="width: 150px;">User</th>
+                <th style="width: 150px;">Operation</th>
+                <th style="width: 120px;">Entity Type</th>
+                <th style="width: 200px;">Entity ID</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody id="auditLogTableBody">
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: #666;">Loading audit log...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Pagination Controls -->
+    <div id="paginationControls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <label for="pageSizeSelect" style="font-size: 14px; color: #666;">Entries per page:</label>
+            <select id="pageSizeSelect" onchange="changePageSize()" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <div style="font-size: 14px; color: #666;">
+            <span id="paginationInfo">-</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="prevPageBtn" class="btn btn-secondary" onclick="changePage(-1)" disabled>
+                Previous
+            </button>
+            <button id="nextPageBtn" class="btn btn-secondary" onclick="changePage(1)" disabled>
+                Next
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Audit Entry Detail Modal -->
+<div id="auditDetailModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h3>Audit Entry Details</h3>
+            <button class="modal-close" onclick="closeAuditDetailModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="auditDetailContent">
+            <!-- Content will be populated dynamically -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 6px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #1a6b3c;
+    }
+    
+    .operation-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    
+    .operation-create {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .operation-update {
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .operation-delete {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .operation-approve {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .operation-reject {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .operation-upload {
+        background: #e7e7ff;
+        color: #4a4a9e;
+    }
+    
+    .operation-activate {
+        background: #fff3cd;
+        color: #664d03;
+    }
+    
+    .operation-reset {
+        background: #fff3cd;
+        color: #664d03;
+    }
+    
+    .operation-deactivate {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .entity-type-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        background: #f0f0f0;
+        color: #666;
+    }
+    
+    .detail-preview {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        color: #666;
+        cursor: pointer;
+    }
+    
+    .detail-preview:hover {
+        color: #1a6b3c;
+        text-decoration: underline;
+    }
+    
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal.active {
+        display: flex;
+    }
+    
+    .modal-content {
+        background: white;
+        border-radius: 8px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .modal-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #999;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+    
+    .modal-close:hover {
+        color: #333;
+    }
+    
+    .modal-body {
+        padding: 24px;
+    }
+    
+    .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #666;
+        width: 150px;
+        flex-shrink: 0;
+    }
+    
+    .detail-value {
+        color: #333;
+        flex: 1;
+    }
+    
+    .detail-json {
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .modal-content {
+            margin: 20px;
+            max-width: calc(100% - 40px);
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .detail-label {
+            width: 100%;
+        }
+        
+        #paginationControls {
+            flex-direction: column;
+            gap: 16px;
+            align-items: stretch !important;
+        }
+        
+        #paginationControls > div {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let currentPage = 1;
+    let pageSize = 50;
+    let totalEntries = 0;
+    let allUsers = [];
+    
+    // Current filters
+    let filters = {
+        user_id: null,
+        operation: null,
+        entity_type: null,
+        date_from: null,
+        date_to: null,
+    };
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadUsers();
+        await loadAuditLog();
+    });
+    
+    // Load users for filter dropdown
+    async function loadUsers() {
+        try {
+            const response = await apiRequest('/api/v1/admin/users?page=1&page_size=1000');
+            if (response && response.ok) {
+                const data = await response.json();
+                allUsers = data.items;
+                
+                // Populate user filter dropdown
+                const userFilter = document.getElementById('userFilter');
+                allUsers.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.username} (${user.email})`;
+                    userFilter.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading users:', error);
+        }
+    }
+    
+    // Load audit log from API
+    async function loadAuditLog() {
+        try {
+            // Build query parameters
+            let url = `/api/v1/admin/audit-log?page=${currentPage}&page_size=${pageSize}`;
+            
+            if (filters.user_id) {
+                url += `&user_id=${filters.user_id}`;
+            }
+            if (filters.operation) {
+                url += `&operation=${filters.operation}`;
+            }
+            if (filters.entity_type) {
+                url += `&entity_type=${filters.entity_type}`;
+            }
+            if (filters.date_from) {
+                url += `&date_from=${filters.date_from}T00:00:00Z`;
+            }
+            if (filters.date_to) {
+                url += `&date_to=${filters.date_to}T23:59:59Z`;
+            }
+            
+            const response = await apiRequest(url);
+            if (response && response.ok) {
+                const data = await response.json();
+                totalEntries = data.total;
+                renderAuditLog(data.items);
+                updatePaginationControls(data.page, data.page_size, data.total);
+                updateTotalCount(data.total);
+            } else {
+                showNotification('Failed to load audit log', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading audit log:', error);
+            showNotification('Error loading audit log', 'error');
+        }
+    }
+    
+    // Render audit log table
+    function renderAuditLog(entries) {
+        const tbody = document.getElementById('auditLogTableBody');
+        
+        if (entries.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                        No audit entries found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = entries.map(entry => {
+            const timestamp = formatDateTime(entry.timestamp);
+            const username = entry.user ? escapeHtml(entry.user.username) : 'System';
+            const operation = escapeHtml(entry.operation);
+            const entityType = escapeHtml(entry.entity_type);
+            const entityId = entry.entity_id ? escapeHtml(entry.entity_id) : '-';
+            
+            // Get operation badge class
+            let operationClass = 'operation-update';
+            if (operation.includes('create')) operationClass = 'operation-create';
+            else if (operation.includes('delete') || operation.includes('deactivate')) operationClass = 'operation-delete';
+            else if (operation.includes('approve')) operationClass = 'operation-approve';
+            else if (operation.includes('reject')) operationClass = 'operation-reject';
+            else if (operation.includes('upload')) operationClass = 'operation-upload';
+            else if (operation.includes('activate')) operationClass = 'operation-activate';
+            else if (operation.includes('reset')) operationClass = 'operation-reset';
+            
+            // Format detail preview
+            let detailPreview = '-';
+            if (entry.detail && Object.keys(entry.detail).length > 0) {
+                const detailStr = JSON.stringify(entry.detail);
+                detailPreview = detailStr.length > 50 
+                    ? detailStr.substring(0, 50) + '...' 
+                    : detailStr;
+            }
+            
+            return `
+                <tr>
+                    <td style="font-size: 13px;">${timestamp}</td>
+                    <td style="font-size: 13px;">${username}</td>
+                    <td><span class="operation-badge ${operationClass}">${operation}</span></td>
+                    <td><span class="entity-type-badge">${entityType}</span></td>
+                    <td style="font-size: 12px; font-family: monospace; color: #666;">${entityId}</td>
+                    <td>
+                        <div class="detail-preview" onclick='viewAuditDetail(${JSON.stringify(entry).replace(/'/g, "&#39;")})'>
+                            ${escapeHtml(detailPreview)}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Update total count display
+    function updateTotalCount(total) {
+        document.getElementById('totalCount').textContent = `${total.toLocaleString()} entries`;
+    }
+    
+    // Update pagination controls
+    function updatePaginationControls(page, pageSize, total) {
+        const totalPages = Math.ceil(total / pageSize);
+        const start = (page - 1) * pageSize + 1;
+        const end = Math.min(page * pageSize, total);
+        
+        document.getElementById('paginationInfo').textContent = 
+            total > 0 ? `Showing ${start}-${end} of ${total}` : 'No entries';
+        
+        document.getElementById('prevPageBtn').disabled = page <= 1;
+        document.getElementById('nextPageBtn').disabled = page >= totalPages;
+    }
+    
+    // Apply filters
+    function applyFilters() {
+        filters.user_id = document.getElementById('userFilter').value || null;
+        filters.operation = document.getElementById('operationFilter').value || null;
+        filters.entity_type = document.getElementById('entityTypeFilter').value || null;
+        filters.date_from = document.getElementById('dateFromFilter').value || null;
+        filters.date_to = document.getElementById('dateToFilter').value || null;
+        
+        currentPage = 1; // Reset to first page
+        loadAuditLog();
+    }
+    
+    // Clear filters
+    function clearFilters() {
+        document.getElementById('userFilter').value = '';
+        document.getElementById('operationFilter').value = '';
+        document.getElementById('entityTypeFilter').value = '';
+        document.getElementById('dateFromFilter').value = '';
+        document.getElementById('dateToFilter').value = '';
+        
+        filters = {
+            user_id: null,
+            operation: null,
+            entity_type: null,
+            date_from: null,
+            date_to: null,
+        };
+        
+        currentPage = 1;
+        loadAuditLog();
+    }
+    
+    // Change page
+    function changePage(delta) {
+        currentPage += delta;
+        if (currentPage < 1) currentPage = 1;
+        loadAuditLog();
+    }
+    
+    // Change page size
+    function changePageSize() {
+        pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+        currentPage = 1; // Reset to first page
+        loadAuditLog();
+    }
+    
+    // View audit entry detail
+    function viewAuditDetail(entry) {
+        const content = document.getElementById('auditDetailContent');
+        
+        const timestamp = formatDateTime(entry.timestamp);
+        const username = entry.user ? escapeHtml(entry.user.username) : 'System';
+        const userEmail = entry.user ? escapeHtml(entry.user.email) : '-';
+        const operation = escapeHtml(entry.operation);
+        const entityType = escapeHtml(entry.entity_type);
+        const entityId = entry.entity_id ? escapeHtml(entry.entity_id) : '-';
+        
+        let detailHtml = '';
+        if (entry.detail && Object.keys(entry.detail).length > 0) {
+            detailHtml = `
+                <div class="detail-row">
+                    <div class="detail-label">Details</div>
+                    <div class="detail-value">
+                        <div class="detail-json">${escapeHtml(JSON.stringify(entry.detail, null, 2))}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        content.innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">Timestamp</div>
+                <div class="detail-value">${timestamp}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">User</div>
+                <div class="detail-value">${username} (${userEmail})</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Operation</div>
+                <div class="detail-value">${operation}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Entity Type</div>
+                <div class="detail-value">${entityType}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Entity ID</div>
+                <div class="detail-value" style="font-family: monospace; font-size: 12px;">${entityId}</div>
+            </div>
+            ${detailHtml}
+        `;
+        
+        document.getElementById('auditDetailModal').classList.add('active');
+    }
+    
+    // Close audit detail modal
+    function closeAuditDetailModal() {
+        document.getElementById('auditDetailModal').classList.remove('active');
+    }
+    
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAuditDetailModal();
+        }
+    });
+    
+    // Close modal on background click
+    document.getElementById('auditDetailModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAuditDetailModal();
+        }
+    });
+    
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+{% endblock %}

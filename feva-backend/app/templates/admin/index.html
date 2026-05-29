@@ -1,0 +1,336 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>System Overview</h2>
+    <p>Welcome to the FEVA Admin Dashboard. Monitor system health and manage your application.</p>
+</div>
+
+<!-- System Health Metrics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Database Status</div>
+        <div class="stat-value" id="dbStatus">
+            <span style="font-size: 1.5rem;">●</span> <span style="font-size: 1.2rem;">Connected</span>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">Disk Space</div>
+        <div class="stat-value" id="diskSpace">--</div>
+        <div class="stat-change">GB available</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">System Uptime</div>
+        <div class="stat-value" id="uptime">--</div>
+        <div class="stat-change">hours</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">Active Users</div>
+        <div class="stat-value" id="activeUsers">--</div>
+        <div class="stat-change">currently online</div>
+    </div>
+</div>
+
+<!-- Record Statistics -->
+<div class="card">
+    <h3 style="margin-bottom: 16px;">Record Statistics</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Pending Records</div>
+            <div class="stat-value" id="pendingRecords" style="color: #856404;">--</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Approved Records</div>
+            <div class="stat-value" id="approvedRecords" style="color: #27ae60;">--</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Rejected Records</div>
+            <div class="stat-value" id="rejectedRecords" style="color: #c0392b;">--</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Total Records</div>
+            <div class="stat-value" id="totalRecords">--</div>
+        </div>
+    </div>
+</div>
+
+<!-- Flagged Records Summary -->
+<div class="card" style="margin-bottom: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3>Flagged Records</h3>
+        <a href="/qa/flagged" style="font-size: 13px; color: #1a6b3c; text-decoration: none;">View all →</a>
+    </div>
+    <div class="stats-grid" style="margin-bottom: 0;">
+        <div class="stat-card" style="border-left: 4px solid #e67e22;">
+            <div class="stat-label">Total Flagged</div>
+            <div class="stat-value" id="totalFlagged" style="color: #e67e22;">--</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #c0392b;">
+            <div class="stat-label">Boundary Flags</div>
+            <div class="stat-value" id="boundaryFlagged" style="color: #c0392b;">--</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #8e44ad;">
+            <div class="stat-label">Duplicate Flags</div>
+            <div class="stat-value" id="duplicateFlagged" style="color: #8e44ad;">--</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #2980b9;">
+            <div class="stat-label">GPS Flags</div>
+            <div class="stat-value" id="gpsFlagged" style="color: #2980b9;">--</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card">
+    <h3 style="margin-bottom: 16px;">Quick Actions</h3>
+    <div class="quick-actions">
+        <a href="/admin/users" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>Manage Users</h3>
+                <p>Create, edit, and manage user accounts</p>
+            </div>
+        </a>
+        
+        <a href="/admin/monitoring" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>View Monitoring</h3>
+                <p>Check sync sessions and system logs</p>
+            </div>
+        </a>
+        
+        <a href="/admin/export" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>Export Data</h3>
+                <p>Download records and audit logs</p>
+            </div>
+        </a>
+        
+        <a href="/admin/config" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>System Configuration</h3>
+                <p>Manage dropdown options and settings</p>
+            </div>
+        </a>
+
+        <a href="/qa/records" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>QR Codes</h3>
+                <p>View records and generate QR codes for buildings &amp; streets</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="activity-list">
+    <h3>Recent Activity</h3>
+    <div id="recentActivity">
+        <div class="activity-item">
+            <div class="activity-text">Loading recent activity...</div>
+            <div class="activity-time">--</div>
+        </div>
+    </div>
+</div>
+
+<!-- Last Update Time -->
+<div style="text-align: center; margin-top: 24px; color: #999; font-size: 12px;" id="lastRefreshTime">
+    Last updated: --
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Load system health metrics
+    async function loadSystemHealth() {
+        try {
+            const response = await apiRequest('/api/v1/admin/monitoring/health');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // Update database status
+                const dbStatusEl = document.getElementById('dbStatus');
+                if (data.database === 'connected') {
+                    dbStatusEl.innerHTML = '<span style="font-size: 1.5rem; color: #27ae60;">●</span> <span style="font-size: 1.2rem;">Connected</span>';
+                } else {
+                    dbStatusEl.innerHTML = '<span style="font-size: 1.5rem; color: #c0392b;">●</span> <span style="font-size: 1.2rem;">Disconnected</span>';
+                }
+                
+                // Update disk space
+                if (data.disk_space_gb !== undefined) {
+                    document.getElementById('diskSpace').textContent = data.disk_space_gb.toFixed(1);
+                }
+                
+                // Update uptime (convert seconds to hours)
+                if (data.uptime_seconds !== undefined) {
+                    const hours = (data.uptime_seconds / 3600).toFixed(1);
+                    document.getElementById('uptime').textContent = hours;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load system health:', error);
+        }
+    }
+    
+    // Load record statistics
+    async function loadStatistics() {
+        try {
+            const response = await apiRequest('/api/v1/admin/monitoring/statistics');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // Update record counts
+                if (data.records_by_status) {
+                    document.getElementById('pendingRecords').textContent = data.records_by_status.pending || 0;
+                    document.getElementById('approvedRecords').textContent = data.records_by_status.approved || 0;
+                    document.getElementById('rejectedRecords').textContent = data.records_by_status.rejected || 0;
+                    
+                    const total = (data.records_by_status.pending || 0) + 
+                                  (data.records_by_status.approved || 0) + 
+                                  (data.records_by_status.rejected || 0);
+                    document.getElementById('totalRecords').textContent = total;
+                }
+                
+                // Update active users count
+                if (data.users_by_role) {
+                    const totalUsers = Object.values(data.users_by_role).reduce((sum, count) => sum + count, 0);
+                    document.getElementById('activeUsers').textContent = totalUsers;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load statistics:', error);
+        }
+    }
+    
+    // Load recent activity from audit log
+    async function loadRecentActivity() {
+        try {
+            const response = await apiRequest('/api/v1/admin/audit-log?page=1&page_size=5');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                const activityContainer = document.getElementById('recentActivity');
+                if (data.items && data.items.length > 0) {
+                    activityContainer.innerHTML = data.items.map(item => {
+                        const timestamp = new Date(item.timestamp);
+                        const timeAgo = getTimeAgo(timestamp);
+                        const username = item.user ? item.user.username : 'System';
+                        const operation = formatOperation(item.operation);
+                        
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-text">${username} ${operation}</div>
+                                <div class="activity-time">${timeAgo}</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    activityContainer.innerHTML = '<div class="activity-item"><div class="activity-text">No recent activity</div></div>';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load recent activity:', error);
+        }
+    }
+    
+    // Format operation name for display
+    function formatOperation(operation) {
+        const operationMap = {
+            'create_user': 'created a user',
+            'update_user': 'updated a user',
+            'deactivate_user': 'deactivated a user',
+            'reset_password': 'reset a password',
+            'create_dropdown': 'added a dropdown option',
+            'update_dropdown': 'updated a dropdown option',
+            'delete_dropdown': 'deleted a dropdown option',
+            'activate_shapefile': 'activated a shapefile',
+            'approve_record': 'approved a record',
+            'reject_record': 'rejected a record',
+        };
+        
+        return operationMap[operation] || operation.replace(/_/g, ' ');
+    }
+    
+    // Get time ago string
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        if (seconds < 60) return 'just now';
+        if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
+        if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
+        return Math.floor(seconds / 86400) + ' days ago';
+    }
+    
+    // Load flagged records summary
+    async function loadFlaggedSummary() {
+        try {
+            const response = await apiRequest('/api/v1/qa/flags');
+            if (response && response.ok) {
+                const data = await response.json();
+                const buildings = data.buildings || [];
+                const streets = data.streets || [];
+                const all = [...buildings, ...streets];
+
+                document.getElementById('totalFlagged').textContent = all.length;
+                document.getElementById('boundaryFlagged').textContent =
+                    all.filter(r => r.boundary_flag).length;
+                document.getElementById('duplicateFlagged').textContent =
+                    buildings.filter(b => b.duplicate_flag).length;
+                document.getElementById('gpsFlagged').textContent =
+                    streets.filter(s => s.gps_accuracy_flag).length;
+            }
+        } catch (error) {
+            console.error('Failed to load flagged summary:', error);
+        }
+    }
+
+    // Refresh all data
+    function refreshDashboard() {
+        loadSystemHealth();
+        loadStatistics();
+        loadRecentActivity();
+        loadFlaggedSummary();
+    }
+    
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        refreshDashboard();
+        updateLastRefreshTime();
+        
+        // Start auto-refresh every 30 seconds
+        startAutoRefresh(refreshDashboard, 30);
+    });
+</script>
+{% endblock %}

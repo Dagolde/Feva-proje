@@ -1,0 +1,2694 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "ST002",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "f6429008-3bc7-4ae8-a35d-3d3fe41a1749",
+        "enumeration_date": "2026-03-18 17:18:05.803984+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "ST001",
+        "street_name": "Test Street",
+        "street_type": "residential",
+        "surface_type": "asphalt",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": "Ward 1",
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "33e30513-b400-4fe9-b2fc-4e71f1725671",
+        "enumeration_date": "2026-03-19 13:26:10.654999+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.123456789,
+            6.123456789
+          ],
+          [
+            3.123456789,
+            6.123456789
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-TEST-000001",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TESTLGA",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "25e1cca9-92ee-49b6-a75a-e700e01982dc",
+        "enumeration_date": "2026-03-20 12:04:09.024134+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-b4473591",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "2374cc2b-2e8f-4608-bc56-7164ce60a0d0",
+        "enumeration_date": "2026-03-19 14:10:16.224492+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22307
+          ],
+          [
+            6.69759,
+            6.22307
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000001",
+        "street_name": "olosho",
+        "street_type": "Street",
+        "surface_type": "Gravel",
+        "street_condition": "Good",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 12:48:47.692701+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22306
+          ],
+          [
+            6.69759,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000002",
+        "street_name": "Olosho",
+        "street_type": "Boulevard",
+        "surface_type": "Paved Blocks",
+        "street_condition": "Good",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 12:52:18.456585+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-f8d5777b-dc17-4e57-93a0-055507113a2b",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:26:27.811279+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-617bb367",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:07.446175+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-70ff97be",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:27:39.543088+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-a9a04ae7-c34f-40d1-902a-7d3355fd913f",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:07.756022+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-44af9d76",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "46bd5081-c7bd-4e6e-8c61-d4ba0f7116bb",
+        "enumeration_date": "2026-03-19 14:23:11.178584+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-c605eb48",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "fdac95b1-ab8b-449f-8a4b-16697bcd93bf",
+        "enumeration_date": "2026-03-19 14:23:11.260304+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-4d4c34a9",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "d5338129-70a6-49b3-83e9-afcb1d2ec49f",
+        "enumeration_date": "2026-03-19 14:23:11.316265+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-6d0f58a5",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:30:47.062430+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-7d415b8c-1c94-499a-a6ee-2e0d012c1110",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:30:47.479500+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-29f413ec",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:32:15.240040+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-ccd88906-b639-4500-8af7-e12e8471d641",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:32:16.117342+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-090fdc1e",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:03.378920+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-aa717125-0069-416b-8d8d-f9bc02c17065",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:03.651831+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-23ad2a99",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "5772494e-8a85-40dc-b80f-b709558337b0",
+        "enumeration_date": "2026-03-19 14:24:06.691409+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-0654f73f",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "f38529be-8937-4aa6-bf34-1a3436b01eb3",
+        "enumeration_date": "2026-03-19 14:24:06.792378+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-aaa97274",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:39:41.248271+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-d7cdba5e-5e99-437a-89bd-974e142bb07d",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:39:41.655618+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-0151c05a",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "5a7d2ae5-1f19-4bad-b002-fc929979ab07",
+        "enumeration_date": "2026-03-19 14:24:06.855379+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-66c7d231",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:41:04.927223+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-2b1a2680-386e-45a3-a27c-b6f9b76512d1",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:41:05.350181+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-b077a059-5435-40e5-8d0b-e28a65354d7c",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:46:42.637329+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-492ba33a",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "24653b60-ccd1-4783-ae58-22759bae98ec",
+        "enumeration_date": "2026-03-19 13:46:52.373748+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-338788d8",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "82e17274-83c0-4bdf-9f63-2a689f4194ef",
+        "enumeration_date": "2026-03-19 13:46:52.708359+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-72eb13a8",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:47:58.339076+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-4f8f915a-52a8-4697-bb78-1c117f663e68",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:47:58.812533+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-f5fa2523",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "a8165052-025d-455a-a9a4-54d98b8973bd",
+        "enumeration_date": "2026-03-19 13:48:06.718163+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.123456789,
+            6.123456789
+          ],
+          [
+            3.123456789,
+            6.123456789
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REALTEST-000001",
+        "street_name": "Main Road",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "REALTEST",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "25e1cca9-92ee-49b6-a75a-e700e01982dc",
+        "enumeration_date": "2026-03-20 12:06:29.077339+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-504b0a1a",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "83a588c4-8287-4942-bff9-7c3a1f912d35",
+        "enumeration_date": "2026-03-19 13:48:06.950364+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-6d67cd65",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "2f1a3f64-96a5-4525-934d-faf95e3c8a5b",
+        "enumeration_date": "2026-03-19 14:10:16.354517+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-fd7c60aa",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "03a604f1-5c86-43e4-a244-559d05ae4c43",
+        "enumeration_date": "2026-03-19 14:10:16.610292+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-a1e24693-9198-4da0-ae45-e41bf36a3633",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 13:49:27.090682+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-6cbd38d6",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "d9dca954-7d54-4b66-9b8e-4452e9642f07",
+        "enumeration_date": "2026-03-19 13:49:34.260327+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-40fcf75f",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "9878b7c3-59b5-47f5-8aee-a5e3be87748c",
+        "enumeration_date": "2026-03-19 13:49:34.496027+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-0ffec061",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:06.274386+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-b647297b",
+        "street_name": "Rejected Street",
+        "street_type": "residential",
+        "surface_type": "unpaved",
+        "street_condition": "poor",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:06.356572+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-c4c1f3ef",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "4804bb0c-4585-4c4d-ab13-faa9dd249167",
+        "enumeration_date": "2026-03-19 14:08:47.912269+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-6cb9b249",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "21d754f1-a2b6-4e50-a077-b3ee5fe11b8c",
+        "enumeration_date": "2026-03-19 14:08:48.047081+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-2cf41382",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "69f931b5-ea70-447e-9c1c-af6a3c588caf",
+        "enumeration_date": "2026-03-19 14:23:11.225346+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-7fa18177",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "2f8d77ce-6223-4511-ba1a-880744915c42",
+        "enumeration_date": "2026-03-19 14:08:48.291801+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-f5265bc5",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:11.408928+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-SMOKE-d300d087",
+        "street_name": "Test Street",
+        "street_type": "residential",
+        "surface_type": "paved",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:23:12.609458+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-3848461e",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:02.145798+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-0a8b4e2e",
+        "street_name": "Rejected Street",
+        "street_type": "residential",
+        "surface_type": "unpaved",
+        "street_condition": "poor",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:02.262031+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-15dc4b87",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ebd601c3-3d43-4899-8e94-25b6b66b6601",
+        "enumeration_date": "2026-03-19 14:24:06.756469+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-57648c5e",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:06.946573+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-SMOKE-446d37f1",
+        "street_name": "Test Street",
+        "street_type": "residential",
+        "surface_type": "paved",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:24:07.908298+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-57627666",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:37.980852+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-a21ba825",
+        "street_name": "Rejected Street",
+        "street_type": "residential",
+        "surface_type": "unpaved",
+        "street_condition": "poor",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:38.071261+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-dcb182a0",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:39.391609+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-69d44b9b-812d-4b26-b06d-886fa89e44e1",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:39.668842+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-dacede26",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "4187af7b-a1fc-42ae-a960-036aa7b7a677",
+        "enumeration_date": "2026-03-19 14:29:42.836901+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-9c68effa",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ecd5cee8-28ef-4e36-82dd-8dc4d913bcc2",
+        "enumeration_date": "2026-03-19 14:29:42.893535+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-2b17da9f",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "f3d6a414-b358-4c75-8d34-b5c06d613d65",
+        "enumeration_date": "2026-03-19 14:29:42.928653+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-5dbfc3f8",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "aa770ebf-ddfd-454e-b3d0-b565e542ae5d",
+        "enumeration_date": "2026-03-19 14:29:42.988965+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-3f33aaca",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:43.078871+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-SMOKE-66914328",
+        "street_name": "Test Street",
+        "street_type": "residential",
+        "surface_type": "paved",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:44.210821+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22306
+          ],
+          [
+            6.69759,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-enumerator-000001",
+        "street_name": "dick Street",
+        "street_type": "Avenue",
+        "surface_type": "Gravel",
+        "street_condition": "Fair",
+        "lga": "enumerator",
+        "zone": null,
+        "ward": null,
+        "notes": "tets",
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 12:09:12.517898+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22307
+          ],
+          [
+            6.69759,
+            6.22307
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000003",
+        "street_name": "Ashana",
+        "street_type": "Street",
+        "surface_type": "Paved Blocks",
+        "street_condition": "Poor",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 13:16:19.150093+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22306
+          ],
+          [
+            6.69759,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000002-7ec374",
+        "street_name": "voice",
+        "street_type": "Street",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-23 10:37:21.257158+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-APPROVED-0",
+        "street_name": "Approved Street 0",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:43.250725+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3802,
+            6.5244
+          ],
+          [
+            3.3803,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-APPROVED-1",
+        "street_name": "Approved Street 1",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:29:43.250725+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22306
+          ],
+          [
+            6.69759,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-enumerator-000002",
+        "street_name": "fucking",
+        "street_type": "Street",
+        "surface_type": "Concrete",
+        "street_condition": "Excellent",
+        "lga": "enumerator",
+        "zone": null,
+        "ward": null,
+        "notes": "test",
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 12:12:22.018084+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69761,
+            6.22306
+          ],
+          [
+            6.69761,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000004",
+        "street_name": "Ashawo",
+        "street_type": "Boulevard",
+        "surface_type": "Gravel",
+        "street_condition": "Fair",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-20 13:17:39.862288+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.69759,
+            6.22306
+          ],
+          [
+            6.69759,
+            6.22306
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-Asaba-000001-63aaa2",
+        "street_name": "ghost",
+        "street_type": "Drive",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Asaba",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "0fab96e6-ebc4-493d-9e4b-e866b546e5eb",
+        "enumeration_date": "2026-03-23 10:20:28.790947+00:00",
+        "boundary_flag": true,
+        "gps_accuracy_flag": true,
+        "qa_flags": [
+          "BOUNDARY_OUTSIDE_ASSIGNED_LGA"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-c319af34",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:33.817784+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-9b579c2c",
+        "street_name": "Rejected Street",
+        "street_type": "residential",
+        "surface_type": "unpaved",
+        "street_condition": "poor",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:33.911946+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-5a1df719",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:34.924055+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.38,
+            6.525
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-68cef692-56ad-49c1-b48a-7f9bc255d328",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "TestLGA",
+        "zone": null,
+        "ward": "TestWard",
+        "notes": "Test street notes",
+        "verification_status": "pending",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:35.194756+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-ac1caff2",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "9810272a-cce9-427a-a7d2-79f538b43c83",
+        "enumeration_date": "2026-03-19 14:30:38.133563+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-5f66483a",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "a8ee059f-86c9-44c5-9ab9-bda4770c8f96",
+        "enumeration_date": "2026-03-19 14:30:38.190923+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-8fcfc2a2",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "a881c1bb-d3d1-416b-91d4-44acbd73651d",
+        "enumeration_date": "2026-03-19 14:30:38.227533+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REJ-6c667ef2",
+        "street_name": "Test Street",
+        "street_type": "Primary",
+        "surface_type": "Asphalt",
+        "street_condition": "Good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "pending",
+        "enumerator_id": "a2d62df2-87af-4a94-afe2-4bd39ec03f4f",
+        "enumeration_date": "2026-03-19 14:30:38.302334+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-9f4223fa",
+        "street_name": "Test Avenue",
+        "street_type": "commercial",
+        "surface_type": "paved",
+        "street_condition": "excellent",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:38.434331+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-REVIEW-1",
+        "street_name": "Review Street",
+        "street_type": "residential",
+        "surface_type": "paved",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "approved",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:38.849917+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.3792,
+            6.5244
+          ],
+          [
+            3.3793,
+            6.5245
+          ]
+        ]
+      },
+      "properties": {
+        "street_id": "STR-SMOKE-31189055",
+        "street_name": "Test Street",
+        "street_type": "residential",
+        "surface_type": "paved",
+        "street_condition": "good",
+        "lga": "Lagos",
+        "zone": null,
+        "ward": null,
+        "notes": null,
+        "verification_status": "rejected",
+        "enumerator_id": "ccd9740f-b75d-40ef-911c-ea09eb454ff9",
+        "enumeration_date": "2026-03-19 14:30:39.728804+00:00",
+        "boundary_flag": false,
+        "gps_accuracy_flag": false,
+        "qa_flags": []
+      }
+    }
+  ]
+}

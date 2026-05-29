@@ -1,0 +1,84 @@
+services:
+  migrate:
+    build:
+      context: .
+      target: runtime
+    image: feva-backend:local
+    container_name: feva_migrate
+    environment:
+      DATABASE_URL: postgresql+asyncpg://feva:feva_dev_pass@db:5432/feva
+      SECRET_KEY: dev-secret-key-change-in-production
+      ENVIRONMENT: development
+    depends_on:
+      db:
+        condition: service_healthy
+    command: alembic upgrade head
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      target: runtime
+    image: feva-backend:local
+    container_name: feva_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://feva:feva_dev_pass@db:5432/feva
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-key-change-in-production
+      ENVIRONMENT: development
+      LOG_LEVEL: debug
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - ./app:/app/app
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+      --log-level debug
+
+  db:
+    image: postgis/postgis:15-3.4-alpine
+    container_name: feva_db
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: feva
+      POSTGRES_USER: feva
+      POSTGRES_PASSWORD: feva_dev_pass
+    volumes:
+      - feva_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U feva -d feva"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: feva_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - feva_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  feva_pgdata:
+  feva_redisdata:

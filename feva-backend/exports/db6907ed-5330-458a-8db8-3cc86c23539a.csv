@@ -1,0 +1,66 @@
+id,user_id,username,operation,entity_type,entity_id,detail,occurred_at
+170,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T14:22:38.301636+00:00
+169,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,3,,2026-03-19T14:22:38.073537+00:00
+167,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:22:38.073537+00:00
+164,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create,user,1,,2026-03-19T14:22:37.778646+00:00
+165,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update,dropdown_config,2,,2026-03-19T14:22:37.778646+00:00
+162,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:22:37.632746+00:00
+163,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T14:22:37.632746+00:00
+160,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,admin_operation,test,1,,2026-03-19T14:22:37.484415+00:00
+155,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation_1,test_entity,2b3c258f-6208-4cec-9e8f-9bc51f4ee1ad,"{""test"": ""data_1""}",2026-03-19T14:22:37.222936+00:00
+158,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation_4,test_entity,163bacfe-ea68-47a9-b57a-4d9fe04304e4,"{""test"": ""data_4""}",2026-03-19T14:22:37.222936+00:00
+157,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation_3,test_entity,399f1368-503b-49ab-9db2-c604cda0ff98,"{""test"": ""data_3""}",2026-03-19T14:22:37.222936+00:00
+156,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation_2,test_entity,57456641-349e-428a-a45d-5ca14318da4e,"{""test"": ""data_2""}",2026-03-19T14:22:37.222936+00:00
+154,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation_0,test_entity,11a278d6-dff3-40fc-980d-905e79c424f9,"{""test"": ""data_0""}",2026-03-19T14:22:37.222936+00:00
+153,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,3,,2026-03-19T14:11:31.791964+00:00
+151,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:11:31.791964+00:00
+148,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,admin_operation,test,1,,2026-03-19T14:11:29.571349+00:00
+147,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,3,,2026-03-19T14:11:01.217152+00:00
+145,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:11:01.217152+00:00
+142,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,admin_operation,test,1,,2026-03-19T14:10:58.013341+00:00
+140,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,3,,2026-03-19T14:09:28.061271+00:00
+138,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:09:28.061271+00:00
+135,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,admin_operation,test,1,,2026-03-19T14:09:27.286409+00:00
+133,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,3,,2026-03-19T14:08:01.284511+00:00
+131,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T14:08:01.284511+00:00
+128,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,admin_operation,test,1,,2026-03-19T14:08:00.713868+00:00
+126,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:48:57.439248+00:00
+123,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:48:57.013026+00:00
+124,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:48:57.013026+00:00
+120,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:47:25.289638+00:00
+117,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:47:24.936033+00:00
+118,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:47:24.936033+00:00
+114,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:46:00.850523+00:00
+112,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:45:59.957696+00:00
+111,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:45:59.957696+00:00
+109,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_user,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""role_id"": {""new"": 2, ""old"": 1}}",2026-03-19T13:41:23.003008+00:00
+108,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,login_failed,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""failed_attempts"": 5}",2026-03-19T13:41:18.927289+00:00
+107,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:40:33.212970+00:00
+105,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:40:32.823258+00:00
+104,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:40:32.823258+00:00
+102,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,login_failed,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""failed_attempts"": 4}",2026-03-19T13:39:55.801769+00:00
+101,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,login_failed,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""failed_attempts"": 3}",2026-03-19T13:39:55.259130+00:00
+100,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,login_failed,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""failed_attempts"": 2}",2026-03-19T13:39:54.706747+00:00
+99,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,login_failed,user,ccd9740f-b75d-40ef-911c-ea09eb454ff9,"{""failed_attempts"": 1}",2026-03-19T13:39:54.220915+00:00
+98,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_dropdown,admin,38,,2026-03-19T13:39:20.969656+00:00
+97,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:39:08.487098+00:00
+94,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:39:08.020280+00:00
+95,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:39:08.020280+00:00
+87,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:31:36.333838+00:00
+84,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:31:35.514458+00:00
+85,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:31:35.514458+00:00
+82,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,deactivate_user,user,bf5aa545-1497-4e9f-a795-5c8a7719605a,,2026-03-19T13:31:08.393166+00:00
+81,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,bf5aa545-1497-4e9f-a795-5c8a7719605a,"{""email"": ""thirdadmin@example.com"", ""role_id"": 1, ""username"": ""thirdadmin""}",2026-03-19T13:31:07.940316+00:00
+80,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,deactivate_user,user,25e1cca9-92ee-49b6-a75a-e700e01982dc,,2026-03-19T13:31:07.563928+00:00
+79,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,deactivate_user,user,c3f2b1c0-113d-44fb-b7ae-0833422d4d4a,,2026-03-19T13:31:07.229643+00:00
+78,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,c3f2b1c0-113d-44fb-b7ae-0833422d4d4a,"{""email"": ""deletetest@example.com"", ""role_id"": 2, ""username"": ""deletetest""}",2026-03-19T13:31:06.803550+00:00
+77,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,fdefe97b-4014-48a8-94a0-c1b180709e98,"{""email"": ""newuser123@example.com"", ""role_id"": 2, ""username"": ""newuser123""}",2026-03-19T13:31:06.039776+00:00
+75,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:30:16.024384+00:00
+72,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:30:15.546885+00:00
+73,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:30:15.546885+00:00
+67,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:27:06.860793+00:00
+64,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:27:06.405802+00:00
+65,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:27:06.405802+00:00
+59,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,test_operation,test,1,"{""key"": ""value""}",2026-03-19T13:25:50.638835+00:00
+57,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,update_dropdown,dropdown_config,2,,2026-03-19T13:25:49.857411+00:00
+56,ccd9740f-b75d-40ef-911c-ea09eb454ff9,test_admin,create_user,user,1,,2026-03-19T13:25:49.857411+00:00

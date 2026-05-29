@@ -1,0 +1,528 @@
+{% extends "qa/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>Flagged Records</h2>
+    <p>Records with quality flags requiring attention</p>
+</div>
+
+<!-- Flag Type Filter -->
+<div class="card" style="margin-bottom: 20px;">
+    <h3 style="margin-bottom: 16px;">Filters</h3>
+    <div class="filter-grid">
+        <div class="form-group">
+            <label for="filterFlagType">Flag Type</label>
+            <select id="filterFlagType" onchange="applyFilters()">
+                <option value="">All Flags</option>
+                <option value="boundary">Boundary Flag</option>
+                <option value="duplicate">Duplicate Flag</option>
+                <option value="gps">GPS Accuracy Flag</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="filterEntityType">Record Type</label>
+            <select id="filterEntityType" onchange="applyFilters()">
+                <option value="">All Types</option>
+                <option value="building">Building</option>
+                <option value="street">Street</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="filterLga">LGA</label>
+            <input type="text" id="filterLga" placeholder="Enter LGA name" oninput="applyFilters()">
+        </div>
+        <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%;">Clear Filters</button>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="stats-grid" style="margin-bottom: 20px;">
+    <div class="stat-card" style="border-left: 4px solid #e67e22;">
+        <div class="stat-label">Total Flagged</div>
+        <div class="stat-value" id="totalFlagged" style="color: #e67e22;">--</div>
+    </div>
+    <div class="stat-card" style="border-left: 4px solid #c0392b;">
+        <div class="stat-label">Boundary Flags</div>
+        <div class="stat-value" id="boundaryCount" style="color: #c0392b;">--</div>
+    </div>
+    <div class="stat-card" style="border-left: 4px solid #8e44ad;">
+        <div class="stat-label">Duplicate Flags</div>
+        <div class="stat-value" id="duplicateCount" style="color: #8e44ad;">--</div>
+    </div>
+    <div class="stat-card" style="border-left: 4px solid #2980b9;">
+        <div class="stat-label">GPS Accuracy Flags</div>
+        <div class="stat-value" id="gpsCount" style="color: #2980b9;">--</div>
+    </div>
+</div>
+
+<!-- Bulk Actions Bar -->
+<div class="action-bar" style="margin-bottom: 16px;">
+    <div class="action-bar-left">
+        <label>
+            <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+            Select all visible
+        </label>
+        <span id="selectedCount" style="color: #666; font-size: 13px; margin-left: 12px;">0 selected</span>
+    </div>
+    <div class="action-bar-right">
+        <button class="btn" id="bulkApproveBtn" onclick="bulkApprove()" disabled>
+            Approve Selected
+        </button>
+        <button class="btn btn-danger" id="bulkRejectBtn" onclick="openBulkRejectModal()" disabled>
+            Reject Selected
+        </button>
+    </div>
+</div>
+
+<!-- Flagged Records Table -->
+<div class="card">
+    <table id="flaggedTable">
+        <thead>
+            <tr>
+                <th style="width: 36px;"></th>
+                <th>Type</th>
+                <th>Record ID</th>
+                <th>LGA</th>
+                <th>Flags</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="flaggedTableBody">
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: #666;">Loading flagged records...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bulk Reject Modal -->
+<div id="bulkRejectModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Reject Selected Records</h3>
+            <button class="modal-close" onclick="closeBulkRejectModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p id="bulkRejectCount" style="margin-bottom: 12px; color: #666;"></p>
+            <div class="form-group">
+                <label for="bulkRejectReason">Rejection Reason (required)</label>
+                <textarea id="bulkRejectReason" rows="3" placeholder="Enter reason for rejection..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeBulkRejectModal()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmBulkReject()">Reject All Selected</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+    }
+
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .action-bar-left,
+    .action-bar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-danger {
+        background: #c0392b;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #a93226;
+    }
+
+    .flag-badge {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-right: 4px;
+        margin-bottom: 2px;
+    }
+
+    .flag-boundary { background: #fde8e8; color: #c0392b; }
+    .flag-duplicate { background: #f3e5f5; color: #8e44ad; }
+    .flag-gps { background: #e3f2fd; color: #2980b9; }
+
+    .badge-building { background: #e3f2fd; color: #0d47a1; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .badge-street { background: #f3e5f5; color: #4a148c; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+
+    .record-row { cursor: pointer; }
+    .record-row:hover { background-color: #f8f9fa; }
+    .record-row.selected { background-color: #e8f5e9; }
+
+    /* Modal */
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: #fff;
+        border-radius: 8px;
+        width: 480px;
+        max-width: 95vw;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h3 { margin: 0; font-size: 16px; }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        line-height: 1;
+    }
+
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 16px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 12px; }
+
+    @media (max-width: 768px) {
+        .filter-grid { grid-template-columns: 1fr; }
+        .action-bar { flex-direction: column; align-items: stretch; }
+        .action-bar-left, .action-bar-right { width: 100%; }
+    }
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // All flagged records loaded from API
+    let allFlagged = [];
+    let filtered = [];
+    let selected = new Set();
+
+    // Load flagged records from /api/v1/qa/flags
+    async function loadFlaggedRecords() {
+        try {
+            const response = await apiRequest('/api/v1/qa/flags');
+            if (!response || !response.ok) {
+                showNotification('Failed to load flagged records', 'error');
+                return;
+            }
+            const data = await response.json();
+
+            // Normalise into a flat list
+            allFlagged = [];
+
+            (data.buildings || []).forEach(b => {
+                allFlagged.push({
+                    id: b.id,
+                    entity_type: 'building',
+                    record_id: b.building_id,
+                    lga: b.lga || '--',
+                    boundary_flag: b.boundary_flag,
+                    duplicate_flag: b.duplicate_flag,
+                    gps_flag: false,
+                    postcode_status: b.postcode_status,
+                    status: 'flagged',
+                });
+            });
+
+            (data.streets || []).forEach(s => {
+                allFlagged.push({
+                    id: s.id,
+                    entity_type: 'street',
+                    record_id: s.street_id,
+                    lga: s.lga || '--',
+                    boundary_flag: s.boundary_flag,
+                    duplicate_flag: false,
+                    gps_flag: s.gps_accuracy_flag,
+                    postcode_status: null,
+                    status: 'flagged',
+                });
+            });
+
+            updateSummaryStats();
+            applyFilters();
+            updateLastRefreshTime();
+        } catch (err) {
+            console.error('Error loading flagged records:', err);
+            showNotification('Error loading flagged records', 'error');
+        }
+    }
+
+    // Update summary stat cards
+    function updateSummaryStats() {
+        const boundary = allFlagged.filter(r => r.boundary_flag).length;
+        const duplicate = allFlagged.filter(r => r.duplicate_flag).length;
+        const gps = allFlagged.filter(r => r.gps_flag).length;
+
+        document.getElementById('totalFlagged').textContent = allFlagged.length;
+        document.getElementById('boundaryCount').textContent = boundary;
+        document.getElementById('duplicateCount').textContent = duplicate;
+        document.getElementById('gpsCount').textContent = gps;
+    }
+
+    // Apply current filters and re-render
+    function applyFilters() {
+        const flagType = document.getElementById('filterFlagType').value;
+        const entityType = document.getElementById('filterEntityType').value;
+        const lga = document.getElementById('filterLga').value.trim().toLowerCase();
+
+        filtered = allFlagged.filter(r => {
+            if (entityType && r.entity_type !== entityType) return false;
+            if (lga && !r.lga.toLowerCase().includes(lga)) return false;
+            if (flagType === 'boundary' && !r.boundary_flag) return false;
+            if (flagType === 'duplicate' && !r.duplicate_flag) return false;
+            if (flagType === 'gps' && !r.gps_flag) return false;
+            return true;
+        });
+
+        // Clear selection when filters change
+        selected.clear();
+        updateSelectionUI();
+        renderTable();
+    }
+
+    // Clear all filters
+    function clearFilters() {
+        document.getElementById('filterFlagType').value = '';
+        document.getElementById('filterEntityType').value = '';
+        document.getElementById('filterLga').value = '';
+        applyFilters();
+    }
+
+    // Render the table
+    function renderTable() {
+        const tbody = document.getElementById('flaggedTableBody');
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        No flagged records match the current filters
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(r => {
+            const typeClass = r.entity_type === 'building' ? 'badge-building' : 'badge-street';
+            const typeLabel = r.entity_type === 'building' ? 'Building' : 'Street';
+            const flags = buildFlagBadges(r);
+            const isSelected = selected.has(r.id);
+
+            return `
+                <tr class="record-row${isSelected ? ' selected' : ''}" onclick="toggleRow(event, '${r.id}')">
+                    <td onclick="event.stopPropagation();">
+                        <input type="checkbox" class="row-checkbox" data-id="${r.id}"
+                            ${isSelected ? 'checked' : ''}
+                            onchange="toggleSelection('${r.id}', this.checked)">
+                    </td>
+                    <td><span class="${typeClass}">${typeLabel}</span></td>
+                    <td>${escapeHtml(r.record_id)}</td>
+                    <td>${escapeHtml(r.lga)}</td>
+                    <td>${flags}</td>
+                    <td>${getStatusBadge(r.status)}</td>
+                    <td onclick="event.stopPropagation();">
+                        <button class="btn btn-secondary btn-icon"
+                            onclick="viewRecord('${r.id}', '${r.entity_type}')">
+                            View
+                        </button>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    // Build flag badge HTML for a record
+    function buildFlagBadges(r) {
+        let badges = '';
+        if (r.boundary_flag) badges += '<span class="flag-badge flag-boundary">Boundary</span>';
+        if (r.duplicate_flag) badges += '<span class="flag-badge flag-duplicate">Duplicate</span>';
+        if (r.gps_flag) badges += '<span class="flag-badge flag-gps">GPS</span>';
+        if (r.postcode_status === 'unresolved') badges += '<span class="flag-badge flag-boundary">Postcode</span>';
+        return badges || '<span style="color:#999; font-size:12px;">--</span>';
+    }
+
+    // Toggle row selection by clicking the row
+    function toggleRow(event, id) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON') return;
+        const isSelected = selected.has(id);
+        toggleSelection(id, !isSelected);
+    }
+
+    // Toggle a single record's selection
+    function toggleSelection(id, checked) {
+        if (checked) {
+            selected.add(id);
+        } else {
+            selected.delete(id);
+        }
+        updateSelectionUI();
+        renderTable();
+    }
+
+    // Toggle all visible rows
+    function toggleSelectAll(checkbox) {
+        if (checkbox.checked) {
+            filtered.forEach(r => selected.add(r.id));
+        } else {
+            filtered.forEach(r => selected.delete(r.id));
+        }
+        updateSelectionUI();
+        renderTable();
+    }
+
+    // Update selection count and button states
+    function updateSelectionUI() {
+        const count = selected.size;
+        document.getElementById('selectedCount').textContent = `${count} selected`;
+        document.getElementById('bulkApproveBtn').disabled = count === 0;
+        document.getElementById('bulkRejectBtn').disabled = count === 0;
+
+        const selectAllCb = document.getElementById('selectAll');
+        selectAllCb.checked = filtered.length > 0 && filtered.every(r => selected.has(r.id));
+        selectAllCb.indeterminate = count > 0 && !selectAllCb.checked;
+    }
+
+    // Navigate to record detail
+    function viewRecord(id, entityType) {
+        window.location.href = `/qa/records/${id}?entity_type=${entityType}`;
+    }
+
+    // Bulk approve selected records
+    async function bulkApprove() {
+        if (selected.size === 0) return;
+
+        const ids = Array.from(selected);
+        const records = filtered.filter(r => ids.includes(r.id));
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const record of records) {
+            try {
+                const resp = await apiRequest(
+                    `/api/v1/qa/records/${record.id}/approve?entity_type=${record.entity_type}`,
+                    { method: 'POST' }
+                );
+                if (resp && resp.ok) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+            } catch {
+                failCount++;
+            }
+        }
+
+        if (successCount > 0) showNotification(`${successCount} record(s) approved`, 'success');
+        if (failCount > 0) showNotification(`${failCount} record(s) could not be approved`, 'error');
+
+        selected.clear();
+        await loadFlaggedRecords();
+    }
+
+    // Open bulk reject modal
+    function openBulkRejectModal() {
+        if (selected.size === 0) return;
+        document.getElementById('bulkRejectCount').textContent =
+            `You are about to reject ${selected.size} record(s).`;
+        document.getElementById('bulkRejectReason').value = '';
+        document.getElementById('bulkRejectModal').style.display = 'flex';
+    }
+
+    function closeBulkRejectModal() {
+        document.getElementById('bulkRejectModal').style.display = 'none';
+    }
+
+    // Confirm and execute bulk rejection
+    async function confirmBulkReject() {
+        const reason = document.getElementById('bulkRejectReason').value.trim();
+        if (!reason) {
+            showNotification('Rejection reason is required', 'error');
+            return;
+        }
+
+        const ids = Array.from(selected);
+        const records = filtered.filter(r => ids.includes(r.id));
+        let successCount = 0;
+        let failCount = 0;
+
+        closeBulkRejectModal();
+
+        for (const record of records) {
+            try {
+                const resp = await apiRequest(
+                    `/api/v1/qa/records/${record.id}/reject?entity_type=${record.entity_type}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ rejection_reason: reason }),
+                    }
+                );
+                if (resp && resp.ok) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+            } catch {
+                failCount++;
+            }
+        }
+
+        if (successCount > 0) showNotification(`${successCount} record(s) rejected`, 'success');
+        if (failCount > 0) showNotification(`${failCount} record(s) could not be rejected`, 'error');
+
+        selected.clear();
+        await loadFlaggedRecords();
+    }
+
+    // Update last refresh time display
+    function updateLastRefreshTime() {
+        const el = document.getElementById('lastRefreshTime');
+        if (el) el.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function () {
+        loadFlaggedRecords();
+        startAutoRefresh(loadFlaggedRecords, 60);
+    });
+</script>
+
+<!-- Last Update Time -->
+<div style="text-align: center; margin-top: 16px; color: #999; font-size: 12px;" id="lastRefreshTime">
+    Last updated: --
+</div>
+{% endblock %}

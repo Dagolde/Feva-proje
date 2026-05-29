@@ -1,0 +1,324 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>Role Management</h2>
+    <p>View role definitions and permissions</p>
+</div>
+
+<!-- Role Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Roles</div>
+        <div class="stat-value" id="totalRoles">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Admin Users</div>
+        <div class="stat-value" id="adminCount">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">QA Officers</div>
+        <div class="stat-value" id="qaCount">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Field Staff</div>
+        <div class="stat-value" id="fieldStaffCount">-</div>
+    </div>
+</div>
+
+<!-- Roles List -->
+<div class="card">
+    <h3 style="margin-bottom: 16px;">System Roles</h3>
+    <div id="rolesContainer">
+        <div style="text-align: center; padding: 40px;">
+            <div class="spinner"></div>
+            <p style="margin-top: 16px; color: #666;">Loading roles...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Info Box -->
+<div class="card" style="background: #e8f5e9; border-left: 4px solid #1a6b3c;">
+    <h4 style="margin-bottom: 8px; color: #1a6b3c;">About Role Management</h4>
+    <p style="margin: 0; color: #333; font-size: 14px;">
+        Roles define what users can do in the system. To assign roles to users, use the 
+        <a href="/admin/users" style="color: #1a6b3c; font-weight: 600;">User Management</a> page.
+        Role definitions are system-managed and cannot be modified through the interface.
+    </p>
+</div>
+
+<style>
+    .role-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: box-shadow 0.2s;
+    }
+    
+    .role-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .role-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .role-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+        text-transform: capitalize;
+    }
+    
+    .role-badge {
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .role-badge.admin {
+        background: #c0392b;
+        color: white;
+    }
+    
+    .role-badge.qa_officer {
+        background: #2980b9;
+        color: white;
+    }
+    
+    .role-badge.supervisor {
+        background: #27ae60;
+        color: white;
+    }
+    
+    .role-badge.enumerator {
+        background: #f39c12;
+        color: white;
+    }
+    
+    .role-description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+        line-height: 1.5;
+    }
+    
+    .permissions-section {
+        margin-top: 16px;
+    }
+    
+    .permissions-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
+    
+    .permissions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
+    }
+    
+    .permission-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #333;
+    }
+    
+    .permission-item svg {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        color: #27ae60;
+        flex-shrink: 0;
+    }
+    
+    .user-count {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .user-count svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    @media (max-width: 768px) {
+        .role-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .permissions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let roles = [];
+    let userCounts = {};
+    
+    // Role descriptions
+    const roleDescriptions = {
+        admin: "Full system access with all administrative capabilities. Can manage users, configure system settings, upload shapefiles, export data, and access all monitoring and audit features.",
+        enumerator: "Field staff who collect building and street data. Can create and edit their own records, upload photos, and synchronize data with the server.",
+        supervisor: "Team leaders who oversee enumerators. Have all enumerator capabilities plus the ability to view team records and submit feedback.",
+        qa_officer: "Quality assurance personnel who review submitted records. Can approve or reject records, view statistics, and access audit trails."
+    };
+    
+    // Permission display names
+    const permissionNames = {
+        manage_users: "Manage Users",
+        manage_roles: "Manage Roles",
+        manage_system_config: "System Configuration",
+        manage_shapefiles: "Shapefile Management",
+        export_data: "Export Data",
+        view_audit_logs: "View Audit Logs",
+        view_monitoring: "System Monitoring",
+        review_records: "Review Records",
+        manage_dropdown_config: "Dropdown Configuration",
+        create_records: "Create Records",
+        edit_own_records: "Edit Own Records",
+        upload_photos: "Upload Photos",
+        sync_data: "Sync Data",
+        view_team_records: "View Team Records",
+        submit_feedback: "Submit Feedback",
+        approve_records: "Approve Records",
+        reject_records: "Reject Records",
+        view_qa_statistics: "View QA Statistics",
+        view_audit_trail: "View Audit Trail"
+    };
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadRoles();
+        await loadUserCounts();
+        renderRoles();
+        updateStatistics();
+    });
+    
+    // Load roles from API
+    async function loadRoles() {
+        try {
+            const response = await apiRequest('/api/v1/admin/roles');
+            if (response && response.ok) {
+                roles = await response.json();
+            } else {
+                showNotification('Failed to load roles', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading roles:', error);
+            showNotification('Error loading roles', 'error');
+        }
+    }
+    
+    // Load user counts by role
+    async function loadUserCounts() {
+        try {
+            const response = await apiRequest('/api/v1/admin/monitoring/statistics');
+            if (response && response.ok) {
+                const data = await response.json();
+                if (data.users_by_role) {
+                    userCounts = data.users_by_role;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user counts:', error);
+        }
+    }
+    
+    // Render roles
+    function renderRoles() {
+        const container = document.getElementById('rolesContainer');
+        
+        if (roles.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    No roles found
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = roles.map(role => {
+            const description = roleDescriptions[role.name] || 'No description available';
+            const userCount = userCounts[role.name] || 0;
+            
+            return `
+                <div class="role-card">
+                    <div class="role-header">
+                        <div>
+                            <div class="role-name">${escapeHtml(role.name.replace('_', ' '))}</div>
+                            <div class="user-count">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                                ${userCount} ${userCount === 1 ? 'user' : 'users'}
+                            </div>
+                        </div>
+                        <span class="role-badge ${role.name}">${escapeHtml(role.name.replace('_', ' '))}</span>
+                    </div>
+                    
+                    <div class="role-description">
+                        ${escapeHtml(description)}
+                    </div>
+                    
+                    <div class="permissions-section">
+                        <div class="permissions-label">Permissions (${role.permissions.length})</div>
+                        <div class="permissions-grid">
+                            ${role.permissions.map(permission => `
+                                <div class="permission-item">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    ${escapeHtml(permissionNames[permission] || permission)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Update statistics
+    function updateStatistics() {
+        document.getElementById('totalRoles').textContent = roles.length;
+        document.getElementById('adminCount').textContent = userCounts.admin || 0;
+        document.getElementById('qaCount').textContent = userCounts.qa_officer || 0;
+        
+        const fieldStaff = (userCounts.enumerator || 0) + (userCounts.supervisor || 0);
+        document.getElementById('fieldStaffCount').textContent = fieldStaff;
+    }
+    
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+{% endblock %}

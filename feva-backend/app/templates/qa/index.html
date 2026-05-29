@@ -1,0 +1,227 @@
+{% extends "qa/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>QA Dashboard</h2>
+    <p>Welcome to the FEVA QA Dashboard. Review and approve enumeration records.</p>
+</div>
+
+<!-- QA Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card" style="border-left: 4px solid #856404;">
+        <div class="stat-label">Pending Records</div>
+        <div class="stat-value" id="pendingRecords" style="color: #856404;">--</div>
+        <div class="stat-change">Awaiting review</div>
+    </div>
+    
+    <div class="stat-card" style="border-left: 4px solid #1a6b3c;">
+        <div class="stat-label">Total Records</div>
+        <div class="stat-value" id="totalRecords">--</div>
+        <div class="stat-change">All submissions</div>
+    </div>
+    
+    <div class="stat-card" style="border-left: 4px solid #27ae60;">
+        <div class="stat-label">Approved Records</div>
+        <div class="stat-value" id="approvedRecords" style="color: #27ae60;">--</div>
+        <div class="stat-change">Quality verified</div>
+    </div>
+    
+    <div class="stat-card" style="border-left: 4px solid #c0392b;">
+        <div class="stat-label">Rejected Records</div>
+        <div class="stat-value" id="rejectedRecords" style="color: #c0392b;">--</div>
+        <div class="stat-change">Needs correction</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card">
+    <h3 style="margin-bottom: 16px;">Quick Actions</h3>
+    <div class="quick-actions">
+        <a href="/qa/records?status=pending" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>Review Pending Records</h3>
+                <p>View and approve pending submissions</p>
+            </div>
+        </a>
+        
+        <a href="/qa/records" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>All Records</h3>
+                <p>Browse and filter all submissions</p>
+            </div>
+        </a>
+        
+        <a href="/qa/flagged" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>Flagged Records</h3>
+                <p>Review records with quality flags</p>
+            </div>
+        </a>
+        
+        <a href="/qa/reports" class="action-card">
+            <div class="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <h3>QA Reports</h3>
+                <p>View statistics and approval rates</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="activity-list">
+    <h3>Recent QA Activity</h3>
+    <div id="recentActivity">
+        <div class="activity-item">
+            <div class="activity-text">Loading recent activity...</div>
+            <div class="activity-time">--</div>
+        </div>
+    </div>
+</div>
+
+<!-- Last Update Time -->
+<div style="text-align: center; margin-top: 24px; color: #999; font-size: 12px;" id="lastRefreshTime">
+    Last updated: --
+</div>
+
+<!-- Boundary Discrepancy Section -->
+<div class="card" style="margin-top: 24px;">
+    <h3 style="margin-bottom: 8px;">
+        Boundary Discrepancies
+        {% if discrepancy_total > 0 %}
+        <span style="display: inline-block; background: #fff3cd; color: #856404; border: 1px solid #ffc107; border-radius: 4px; padding: 2px 10px; font-size: 14px; font-weight: 600; margin-left: 8px;">
+            ⚠ {{ discrepancy_total }} discrepanc{{ 'y' if discrepancy_total == 1 else 'ies' }} detected
+        </span>
+        {% else %}
+        <span style="display: inline-block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; padding: 2px 10px; font-size: 14px; font-weight: 600; margin-left: 8px;">
+            ✓ No discrepancies
+        </span>
+        {% endif %}
+    </h3>
+    <p style="color: #666; font-size: 13px; margin-bottom: 16px;">
+        NIPOST postcode polygon overlaps with State administrative boundaries (LGA/Ward).
+        Total active discrepancy records: <strong>{{ discrepancy_total }}</strong>.
+    </p>
+
+    {% if discrepancy_by_lga %}
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead>
+            <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                <th style="text-align: left; padding: 8px 12px;">Admin Polygon (LGA/Ward)</th>
+                <th style="text-align: right; padding: 8px 12px;">Discrepancy Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in discrepancy_by_lga %}
+            <tr style="border-bottom: 1px solid #dee2e6;
+                       {% if row.count > 0 %}background: #fff8e1;{% endif %}">
+                <td style="padding: 8px 12px;">{{ row.lga }}</td>
+                <td style="text-align: right; padding: 8px 12px;
+                           {% if row.count > 0 %}color: #856404; font-weight: 600;{% endif %}">
+                    {% if row.count > 0 %}⚠ {% endif %}{{ row.count }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #999; font-size: 13px;">No boundary discrepancy data available.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Load QA statistics
+    async function loadQAStatistics() {
+        try {
+            const response = await apiRequest('/api/v1/qa/statistics');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // Update statistics cards
+                document.getElementById('totalRecords').textContent = data.total_records || 0;
+                document.getElementById('pendingRecords').textContent = data.pending_records || 0;
+                document.getElementById('approvedRecords').textContent = data.approved_records || 0;
+                document.getElementById('rejectedRecords').textContent = data.rejected_records || 0;
+            }
+        } catch (error) {
+            console.error('Failed to load QA statistics:', error);
+        }
+    }
+    
+    // Load recent QA activity from QA records endpoint (accessible to qa_officer)
+    async function loadRecentActivity() {
+        try {
+            const response = await apiRequest('/api/v1/qa/records?page=1&page_size=5');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                const activityContainer = document.getElementById('recentActivity');
+                if (data.items && data.items.length > 0) {
+                    activityContainer.innerHTML = data.items.map(item => {
+                        const timeAgo = getTimeAgo(new Date(item.submitted_at));
+                        const statusText = item.status === 'approved' ? 'approved' :
+                                           item.status === 'rejected' ? 'rejected' : 'submitted';
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-text">${escapeHtml(item.enumerator_username)} ${statusText} ${item.entity_type} <strong>${escapeHtml(item.record_id)}</strong></div>
+                                <div class="activity-time">${timeAgo}</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    activityContainer.innerHTML = '<div class="activity-item"><div class="activity-text">No recent QA activity</div></div>';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load recent activity:', error);
+        }
+    }
+    
+    // Get time ago string
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        if (seconds < 60) return 'just now';
+        if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
+        if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
+        return Math.floor(seconds / 86400) + ' days ago';
+    }
+    
+    // Refresh all data
+    function refreshDashboard() {
+        loadQAStatistics();
+        loadRecentActivity();
+    }
+    
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        refreshDashboard();
+        updateLastRefreshTime();
+        
+        // Start auto-refresh every 60 seconds (QA dashboard requirement)
+        startAutoRefresh(refreshDashboard, 60);
+    });
+</script>
+{% endblock %}

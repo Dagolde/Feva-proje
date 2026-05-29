@@ -1,0 +1,635 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>System Monitoring</h2>
+    <p>Monitor system health, sync sessions, and record statistics</p>
+</div>
+
+<!-- System Health Dashboard -->
+<div class="card" style="margin-bottom: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">System Health</h3>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="lastRefreshTime" style="font-size: 12px; color: #666;"></span>
+            <button class="btn btn-secondary" onclick="refreshAllData()" style="padding: 8px 16px;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Database</div>
+            <div class="stat-value" id="databaseStatus">
+                <span class="spinner" style="width: 24px; height: 24px;"></span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Disk Space</div>
+            <div class="stat-value" id="diskSpace">-</div>
+            <div class="stat-change" style="font-size: 12px; color: #666; margin-top: 4px;">Available</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Uptime</div>
+            <div class="stat-value" id="uptime">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Last Check</div>
+            <div class="stat-value" id="lastCheck" style="font-size: 1.2rem;">-</div>
+        </div>
+    </div>
+</div>
+
+<!-- Record Statistics -->
+<div class="card" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 20px;">Record Statistics</h3>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Pending Records</div>
+            <div class="stat-value" id="pendingRecords" style="color: #f39c12;">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Approved Records</div>
+            <div class="stat-value" id="approvedRecords" style="color: #27ae60;">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Rejected Records</div>
+            <div class="stat-value" id="rejectedRecords" style="color: #c0392b;">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Flagged Records</div>
+            <div class="stat-value" id="flaggedRecords" style="color: #e74c3c;">-</div>
+        </div>
+    </div>
+</div>
+
+<!-- User Statistics -->
+<div class="card" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 20px;">Active Users by Role</h3>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Administrators</div>
+            <div class="stat-value" id="adminUsers">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">QA Officers</div>
+            <div class="stat-value" id="qaUsers">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Supervisors</div>
+            <div class="stat-value" id="supervisorUsers">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Enumerators</div>
+            <div class="stat-value" id="enumeratorUsers">-</div>
+        </div>
+    </div>
+</div>
+
+<!-- Sync Session Logs -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">Recent Sync Sessions</h3>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <select id="statusFilter" onchange="loadSyncSessions()" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                <option value="">All Statuses</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+                <option value="in_progress">In Progress</option>
+            </select>
+        </div>
+    </div>
+    
+    <table id="syncSessionsTable">
+        <thead>
+            <tr>
+                <th>Device ID</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Started</th>
+                <th>Completed</th>
+                <th>Records Synced</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="syncSessionsTableBody">
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: #666;">Loading sync sessions...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Pagination Controls -->
+    <div id="paginationControls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+        <div style="font-size: 14px; color: #666;">
+            <span id="paginationInfo">-</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="prevPageBtn" class="btn btn-secondary" onclick="changePage(-1)" disabled>
+                Previous
+            </button>
+            <button id="nextPageBtn" class="btn btn-secondary" onclick="changePage(1)" disabled>
+                Next
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Sync Session Detail Modal -->
+<div id="sessionDetailModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h3>Sync Session Details</h3>
+            <button class="modal-close" onclick="closeSessionDetailModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="sessionDetailContent">
+            <!-- Content will be populated dynamically -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .status-completed {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .status-failed {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .status-in_progress {
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .health-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.5rem;
+    }
+    
+    .health-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    
+    .health-dot.connected {
+        background: #27ae60;
+        box-shadow: 0 0 8px rgba(39, 174, 96, 0.5);
+    }
+    
+    .health-dot.disconnected {
+        background: #c0392b;
+        box-shadow: 0 0 8px rgba(192, 57, 43, 0.5);
+    }
+    
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal.active {
+        display: flex;
+    }
+    
+    .modal-content {
+        background: white;
+        border-radius: 8px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .modal-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #999;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+    
+    .modal-close:hover {
+        color: #333;
+    }
+    
+    .modal-body {
+        padding: 24px;
+    }
+    
+    .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #666;
+        width: 180px;
+        flex-shrink: 0;
+    }
+    
+    .detail-value {
+        color: #333;
+        flex: 1;
+    }
+    
+    .error-message {
+        background: #f8d7da;
+        color: #842029;
+        padding: 12px;
+        border-radius: 4px;
+        margin-top: 12px;
+        font-family: monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .modal-content {
+            margin: 20px;
+            max-width: calc(100% - 40px);
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .detail-label {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let currentPage = 1;
+    let pageSize = 20;
+    let totalSessions = 0;
+    let autoRefreshInterval = null;
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await refreshAllData();
+        
+        // Start auto-refresh every 30 seconds
+        startAutoRefresh();
+    });
+    
+    // Refresh all monitoring data
+    async function refreshAllData() {
+        await Promise.all([
+            loadSystemHealth(),
+            loadStatistics(),
+            loadSyncSessions()
+        ]);
+        updateLastRefreshTime();
+    }
+    
+    // Load system health metrics
+    async function loadSystemHealth() {
+        try {
+            const response = await apiRequest('/api/v1/admin/monitoring/health');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // Database status
+                const dbStatus = document.getElementById('databaseStatus');
+                if (data.database === 'connected') {
+                    dbStatus.innerHTML = `
+                        <div class="health-indicator">
+                            <span class="health-dot connected"></span>
+                            <span style="color: #27ae60;">Connected</span>
+                        </div>
+                    `;
+                } else {
+                    dbStatus.innerHTML = `
+                        <div class="health-indicator">
+                            <span class="health-dot disconnected"></span>
+                            <span style="color: #c0392b;">Disconnected</span>
+                        </div>
+                    `;
+                }
+                
+                // Disk space
+                document.getElementById('diskSpace').textContent = `${data.disk_space_gb.toFixed(1)} GB`;
+                
+                // Uptime
+                const uptimeHours = Math.floor(data.uptime_seconds / 3600);
+                const uptimeMinutes = Math.floor((data.uptime_seconds % 3600) / 60);
+                document.getElementById('uptime').textContent = `${uptimeHours}h ${uptimeMinutes}m`;
+                
+                // Last check
+                const lastCheck = new Date(data.timestamp);
+                document.getElementById('lastCheck').textContent = lastCheck.toLocaleTimeString();
+            } else {
+                showNotification('Failed to load system health', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading system health:', error);
+            showNotification('Error loading system health', 'error');
+        }
+    }
+    
+    // Load statistics
+    async function loadStatistics() {
+        try {
+            const response = await apiRequest('/api/v1/admin/monitoring/statistics');
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // Record statistics
+                const recordsByStatus = data.records_by_status || {};
+                document.getElementById('pendingRecords').textContent = (recordsByStatus.pending || 0).toLocaleString();
+                document.getElementById('approvedRecords').textContent = (recordsByStatus.approved || 0).toLocaleString();
+                document.getElementById('rejectedRecords').textContent = (recordsByStatus.rejected || 0).toLocaleString();
+                document.getElementById('flaggedRecords').textContent = (recordsByStatus.flagged || 0).toLocaleString();
+                
+                // User statistics
+                const usersByRole = data.users_by_role || {};
+                document.getElementById('adminUsers').textContent = (usersByRole.admin || 0).toLocaleString();
+                document.getElementById('qaUsers').textContent = (usersByRole.qa_officer || 0).toLocaleString();
+                document.getElementById('supervisorUsers').textContent = (usersByRole.supervisor || 0).toLocaleString();
+                document.getElementById('enumeratorUsers').textContent = (usersByRole.enumerator || 0).toLocaleString();
+            } else {
+                showNotification('Failed to load statistics', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading statistics:', error);
+            showNotification('Error loading statistics', 'error');
+        }
+    }
+    
+    // Load sync sessions
+    async function loadSyncSessions() {
+        try {
+            const statusFilter = document.getElementById('statusFilter').value;
+            let url = `/api/v1/admin/monitoring/sync-sessions?page=${currentPage}&page_size=${pageSize}`;
+            if (statusFilter) {
+                url += `&status=${statusFilter}`;
+            }
+            
+            const response = await apiRequest(url);
+            if (response && response.ok) {
+                const data = await response.json();
+                totalSessions = data.total;
+                renderSyncSessions(data.items);
+                updatePaginationControls(data.page, data.page_size, data.total);
+            } else {
+                showNotification('Failed to load sync sessions', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading sync sessions:', error);
+            showNotification('Error loading sync sessions', 'error');
+        }
+    }
+    
+    // Render sync sessions table
+    function renderSyncSessions(sessions) {
+        const tbody = document.getElementById('syncSessionsTableBody');
+        
+        if (sessions.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        No sync sessions found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = sessions.map(session => {
+            const statusClass = `status-${session.status}`;
+            const startedDate = formatDateTime(session.started_at);
+            const completedDate = session.completed_at ? formatDateTime(session.completed_at) : '-';
+            const recordsSynced = session.records_synced || 0;
+            
+            let actions = '';
+            if (session.status === 'failed') {
+                actions = `
+                    <button class="btn btn-secondary" onclick="viewSessionDetail('${session.id}')" style="padding: 6px 12px; font-size: 13px;">
+                        View Details
+                    </button>
+                `;
+            } else {
+                actions = `
+                    <button class="btn btn-secondary" onclick="viewSessionDetail('${session.id}')" style="padding: 6px 12px; font-size: 13px;">
+                        View
+                    </button>
+                `;
+            }
+            
+            return `
+                <tr>
+                    <td>${escapeHtml(session.device_id || 'Unknown')}</td>
+                    <td>${escapeHtml(session.username || 'Unknown')}</td>
+                    <td><span class="status-badge ${statusClass}">${session.status}</span></td>
+                    <td>${startedDate}</td>
+                    <td>${completedDate}</td>
+                    <td>${recordsSynced}</td>
+                    <td>${actions}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Update pagination controls
+    function updatePaginationControls(page, pageSize, total) {
+        const totalPages = Math.ceil(total / pageSize);
+        const start = (page - 1) * pageSize + 1;
+        const end = Math.min(page * pageSize, total);
+        
+        document.getElementById('paginationInfo').textContent = 
+            `Showing ${start}-${end} of ${total} sessions`;
+        
+        document.getElementById('prevPageBtn').disabled = page <= 1;
+        document.getElementById('nextPageBtn').disabled = page >= totalPages;
+    }
+    
+    // Change page
+    function changePage(delta) {
+        currentPage += delta;
+        if (currentPage < 1) currentPage = 1;
+        loadSyncSessions();
+    }
+    
+    // View session detail
+    async function viewSessionDetail(sessionId) {
+        try {
+            const response = await apiRequest(`/api/v1/admin/monitoring/sync-sessions/${sessionId}`);
+            if (response && response.ok) {
+                const session = await response.json();
+                showSessionDetailModal(session);
+            } else {
+                showNotification('Failed to load session details', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading session details:', error);
+            showNotification('Error loading session details', 'error');
+        }
+    }
+    
+    // Show session detail modal
+    function showSessionDetailModal(session) {
+        const content = document.getElementById('sessionDetailContent');
+        
+        let html = `
+            <div class="detail-row">
+                <div class="detail-label">Session ID</div>
+                <div class="detail-value">${escapeHtml(session.id)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Device ID</div>
+                <div class="detail-value">${escapeHtml(session.device_id || 'Unknown')}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">User</div>
+                <div class="detail-value">${escapeHtml(session.username || 'Unknown')}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Status</div>
+                <div class="detail-value"><span class="status-badge status-${session.status}">${session.status}</span></div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Started At</div>
+                <div class="detail-value">${formatDateTime(session.started_at)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Completed At</div>
+                <div class="detail-value">${session.completed_at ? formatDateTime(session.completed_at) : 'Not completed'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Records Synced</div>
+                <div class="detail-value">${session.records_synced || 0}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Records Received</div>
+                <div class="detail-value">${session.records_received || 0}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Accepted / Rejected</div>
+                <div class="detail-value">${session.records_accepted || 0} / ${session.records_rejected || 0}</div>
+            </div>
+        `;
+        
+        if (session.error_message) {
+            html += `
+                <div class="detail-row">
+                    <div class="detail-label">Error Message</div>
+                    <div class="detail-value">
+                        <div class="error-message">${escapeHtml(session.error_message)}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        content.innerHTML = html;
+        document.getElementById('sessionDetailModal').classList.add('active');
+    }
+    
+    // Close session detail modal
+    function closeSessionDetailModal() {
+        document.getElementById('sessionDetailModal').classList.remove('active');
+    }
+    
+    // Auto-refresh functionality
+    function startAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        
+        autoRefreshInterval = setInterval(async () => {
+            await refreshAllData();
+        }, 30000); // Refresh every 30 seconds
+    }
+    
+    function updateLastRefreshTime() {
+        const timeElement = document.getElementById('lastRefreshTime');
+        if (timeElement) {
+            const now = new Date();
+            timeElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+        }
+    }
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+    });
+    
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSessionDetailModal();
+        }
+    });
+    
+    // Close modal on background click
+    document.getElementById('sessionDetailModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeSessionDetailModal();
+        }
+    });
+</script>
+{% endblock %}

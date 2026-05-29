@@ -1,0 +1,625 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>User Management</h2>
+    <p>Manage user accounts, roles, and permissions</p>
+</div>
+
+<!-- User Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="totalUsers">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Active Users</div>
+        <div class="stat-value" id="activeUsers">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Locked Users</div>
+        <div class="stat-value" id="lockedUsers">-</div>
+    </div>
+</div>
+
+<!-- Search and Actions -->
+<div class="action-bar">
+    <div class="action-bar-left">
+        <input type="text" id="searchInput" placeholder="Search by username..." style="min-width: 300px;">
+    </div>
+    <div class="action-bar-right">
+        <button class="btn" onclick="openCreateUserModal()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Create User
+        </button>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="card">
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>LGA Assignment</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: #666;">Loading users...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+<div class="pagination" id="pagination"></div>
+
+<!-- Create User Modal -->
+<div class="modal-overlay" id="createUserModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Create New User</h3>
+            <button class="modal-close" onclick="closeCreateUserModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label for="createUsername">Username *</label>
+                    <input type="text" id="createUsername" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="createEmail">Email *</label>
+                    <input type="email" id="createEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="createPassword">Password *</label>
+                    <input type="password" id="createPassword" name="password" required>
+                    <small style="color: #666; font-size: 12px;">Minimum 8 characters, one uppercase, one lowercase, one number</small>
+                </div>
+                <div class="form-group">
+                    <label for="createRole">Role *</label>
+                    <select id="createRole" name="role_id" required>
+                        <option value="">Select role...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createLgaAssignment">LGA Assignment</label>
+                    <input type="text" id="createLgaAssignment" name="lga_assignment" placeholder="Comma-separated LGA names (optional)">
+                    <small style="color: #666; font-size: 12px;">Leave empty for admin/qa_officer roles</small>
+                </div>
+                <div class="form-group">
+                    <label for="createWardAssignment">Ward Assignment</label>
+                    <input type="text" id="createWardAssignment" name="ward_assignment" placeholder="Ward name (optional)">
+                    <small style="color: #666; font-size: 12px;">Assign a ward to enumerators/supervisors</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeCreateUserModal()">Cancel</button>
+            <button class="btn" onclick="submitCreateUser()">Create User</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal-overlay" id="editUserModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Edit User</h3>
+            <button class="modal-close" onclick="closeEditUserModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="editUsername" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label for="editRole">Role *</label>
+                    <select id="editRole" name="role_id" required>
+                        <option value="">Select role...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editLgaAssignment">LGA Assignment</label>
+                    <input type="text" id="editLgaAssignment" name="lga_assignment" placeholder="Comma-separated LGA names">
+                </div>
+                <div class="form-group">
+                    <label for="editWardAssignment">Ward Assignment</label>
+                    <input type="text" id="editWardAssignment" name="ward_assignment" placeholder="Ward name (optional)">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeEditUserModal()">Cancel</button>
+            <button class="btn" onclick="submitEditUser()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="modal-overlay" id="resetPasswordModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Reset Password</h3>
+            <button class="modal-close" onclick="closeResetPasswordModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="resetPasswordForm">
+                <input type="hidden" id="resetUserId">
+                <p style="margin-bottom: 16px;">Reset password for user: <strong id="resetUsername"></strong></p>
+                <div class="form-group">
+                    <label for="newPassword">New Password *</label>
+                    <input type="password" id="newPassword" name="new_password" required>
+                    <small style="color: #666; font-size: 12px;">Minimum 8 characters, one uppercase, one lowercase, one number</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeResetPasswordModal()">Cancel</button>
+            <button class="btn" onclick="submitResetPassword()">Reset Password</button>
+        </div>
+    </div>
+</div>
+
+<!-- Deactivate User Confirmation Modal -->
+<div class="modal-overlay" id="deactivateUserModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Deactivate User</h3>
+            <button class="modal-close" onclick="closeDeactivateUserModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="deactivateUserId">
+            <p>Are you sure you want to deactivate user: <strong id="deactivateUsername"></strong>?</p>
+            <p style="color: #c0392b; margin-top: 12px;">This will lock the user account and prevent login.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeDeactivateUserModal()">Cancel</button>
+            <button class="btn btn-danger" onclick="submitDeactivateUser()">Deactivate</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .action-bar-left,
+    .action-bar-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .user-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-icon {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .action-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .action-bar-left,
+        .action-bar-right {
+            width: 100%;
+        }
+        
+        #searchInput {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let currentPage = 1;
+    const pageSize = 50;
+    let allUsers = [];
+    let roles = [];
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadRoles();
+        await loadUsers();
+        
+        // Setup search
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            filterUsers(e.target.value);
+        });
+    });
+    
+    // Load roles for dropdowns
+    async function loadRoles() {
+        try {
+            const response = await apiRequest('/api/v1/admin/roles');
+            if (response && response.ok) {
+                roles = await response.json();
+                
+                // Populate role dropdowns (clear first to avoid duplicates)
+                const createRoleSelect = document.getElementById('createRole');
+                const editRoleSelect = document.getElementById('editRole');
+                
+                // Clear existing options except the placeholder
+                while (createRoleSelect.options.length > 1) createRoleSelect.remove(1);
+                while (editRoleSelect.options.length > 1) editRoleSelect.remove(1);
+                
+                roles.forEach(role => {
+                    const option1 = document.createElement('option');
+                    option1.value = String(role.id);
+                    option1.textContent = role.name;
+                    createRoleSelect.appendChild(option1);
+                    
+                    const option2 = document.createElement('option');
+                    option2.value = String(role.id);
+                    option2.textContent = role.name;
+                    editRoleSelect.appendChild(option2);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading roles:', error);
+            showNotification('Failed to load roles', 'error');
+        }
+    }
+    
+    // Load users from API
+    async function loadUsers() {
+        try {
+            const response = await apiRequest(`/api/v1/admin/users?page=${currentPage}&page_size=${pageSize}`);
+            if (response && response.ok) {
+                const data = await response.json();
+                allUsers = data.items;
+                renderUsers(allUsers);
+                renderPagination(data.total, data.page, data.page_size);
+                updateStatistics(data.items);
+            } else {
+                showNotification('Failed to load users', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading users:', error);
+            showNotification('Error loading users', 'error');
+        }
+    }
+    
+    // Render users table
+    function renderUsers(users) {
+        const tbody = document.getElementById('usersTableBody');
+        
+        if (users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        No users found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = users.map(user => {
+            const roleName = roles.find(r => r.id === user.role_id)?.name || 'Unknown';
+            const status = user.locked_at ? 'Locked' : 'Active';
+            const statusClass = user.locked_at ? 'badge-danger' : 'badge-success';
+            const lgaDisplay = user.lga_assignment && user.lga_assignment.length > 0 
+                ? user.lga_assignment.join(', ') 
+                : '-';
+            const createdDate = new Date(user.created_at).toLocaleDateString();
+            
+            return `
+                <tr>
+                    <td>${escapeHtml(user.username)}</td>
+                    <td>${escapeHtml(user.email)}</td>
+                    <td>${escapeHtml(roleName)}</td>
+                    <td>${escapeHtml(lgaDisplay)}</td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <div class="user-actions">
+                            <button class="btn btn-secondary btn-icon" onclick="openEditUserModal('${user.id}')" title="Edit">
+                                Edit
+                            </button>
+                            <button class="btn btn-secondary btn-icon" onclick="openResetPasswordModal('${user.id}', '${escapeHtml(user.username)}')" title="Reset Password">
+                                Reset
+                            </button>
+                            ${!user.locked_at ? `
+                                <button class="btn btn-danger btn-icon" onclick="openDeactivateUserModal('${user.id}', '${escapeHtml(user.username)}')" title="Deactivate">
+                                    Deactivate
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Filter users by search term
+    function filterUsers(searchTerm) {
+        const filtered = allUsers.filter(user => 
+            user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        renderUsers(filtered);
+    }
+    
+    // Update statistics
+    function updateStatistics(users) {
+        const total = users.length;
+        const active = users.filter(u => !u.locked_at).length;
+        const locked = users.filter(u => u.locked_at).length;
+        
+        document.getElementById('totalUsers').textContent = total;
+        document.getElementById('activeUsers').textContent = active;
+        document.getElementById('lockedUsers').textContent = locked;
+    }
+    
+    // Render pagination
+    function renderPagination(total, page, pageSize) {
+        const totalPages = Math.ceil(total / pageSize);
+        const pagination = document.getElementById('pagination');
+        
+        if (totalPages <= 1) {
+            pagination.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        
+        // Previous button
+        html += `<button ${page === 1 ? 'disabled' : ''} onclick="changePage(${page - 1})">Previous</button>`;
+        
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+                html += `<button class="${i === page ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            } else if (i === page - 3 || i === page + 3) {
+                html += '<span>...</span>';
+            }
+        }
+        
+        // Next button
+        html += `<button ${page === totalPages ? 'disabled' : ''} onclick="changePage(${page + 1})">Next</button>`;
+        
+        pagination.innerHTML = html;
+    }
+    
+    // Change page
+    async function changePage(page) {
+        currentPage = page;
+        await loadUsers();
+    }
+    
+    // Create User Modal
+    function openCreateUserModal() {
+        document.getElementById('createUserModal').style.display = 'flex';
+        document.getElementById('createUserForm').reset();
+    }
+    
+    function closeCreateUserModal() {
+        document.getElementById('createUserModal').style.display = 'none';
+    }
+    
+    async function submitCreateUser() {
+        const form = document.getElementById('createUserForm');
+        const formData = new FormData(form);
+        
+        const lgaInput = formData.get('lga_assignment');
+        const lgaAssignment = lgaInput ? lgaInput.split(',').map(s => s.trim()).filter(s => s) : null;
+        const wardInput = (formData.get('ward_assignment') || '').trim();
+        
+        const data = {
+            username: formData.get('username'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            role_id: parseInt(formData.get('role_id')),
+            lga_assignment: lgaAssignment,
+            ward_assignment: wardInput || null,
+        };
+        
+        try {
+            const response = await apiRequest('/api/v1/admin/users', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+            
+            if (!response) return;
+            
+            if (response.ok) {
+                showNotification('User created successfully', 'success');
+                closeCreateUserModal();
+                await loadUsers();
+            } else {
+                let detail = 'Failed to create user';
+                try { const error = await response.json(); detail = error.detail || detail; } catch (_) {}
+                showNotification(detail, 'error');
+            }
+        } catch (error) {
+            console.error('Error creating user:', error);
+            showNotification('Error creating user', 'error');
+        }
+    }
+    
+    // Edit User Modal
+    function openEditUserModal(userId) {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) {
+            showNotification('User not found — please refresh the page', 'error');
+            return;
+        }
+        
+        document.getElementById('editUserId').value = user.id;
+        document.getElementById('editUsername').value = user.username;
+        document.getElementById('editEmail').value = user.email;
+        document.getElementById('editRole').value = String(user.role_id);
+        document.getElementById('editLgaAssignment').value = user.lga_assignment ? user.lga_assignment.join(', ') : '';
+        document.getElementById('editWardAssignment').value = user.ward_assignment || '';
+        
+        document.getElementById('editUserModal').style.display = 'flex';
+    }
+    
+    function closeEditUserModal() {
+        document.getElementById('editUserModal').style.display = 'none';
+    }
+    
+    async function submitEditUser() {
+        const userId = document.getElementById('editUserId').value;
+        const roleIdRaw = document.getElementById('editRole').value;
+        const roleId = roleIdRaw ? parseInt(roleIdRaw, 10) : null;
+        const lgaInput = document.getElementById('editLgaAssignment').value.trim();
+        const lgaAssignment = lgaInput ? lgaInput.split(',').map(s => s.trim()).filter(Boolean) : null;
+        const wardInput = document.getElementById('editWardAssignment').value.trim();
+        
+        if (!roleId) {
+            showNotification('Please select a role', 'error');
+            return;
+        }
+        
+        const data = {
+            role_id: roleId,
+            lga_assignment: lgaAssignment,
+            ward_assignment: wardInput || null,
+        };
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/users/${userId}`, {
+                method: 'PATCH',
+                body: JSON.stringify(data),
+            });
+            
+            if (!response) return; // 401 redirect handled by apiRequest
+            
+            if (response.ok) {
+                showNotification('User updated successfully', 'success');
+                closeEditUserModal();
+                await loadUsers();
+            } else {
+                let detail = 'Failed to update user';
+                try {
+                    const error = await response.json();
+                    detail = error.detail || error.message || detail;
+                } catch (_) {}
+                showNotification(detail, 'error');
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+            showNotification('Error updating user', 'error');
+        }
+    }
+    
+    // Reset Password Modal
+    function openResetPasswordModal(userId, username) {
+        document.getElementById('resetUserId').value = userId;
+        document.getElementById('resetUsername').textContent = username;
+        document.getElementById('resetPasswordForm').reset();
+        document.getElementById('resetPasswordModal').style.display = 'flex';
+    }
+    
+    function closeResetPasswordModal() {
+        document.getElementById('resetPasswordModal').style.display = 'none';
+    }
+    
+    async function submitResetPassword() {
+        const userId = document.getElementById('resetUserId').value;
+        const newPassword = document.getElementById('newPassword').value;
+        
+        const data = {
+            new_password: newPassword,
+        };
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/users/${userId}/reset-password`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+            
+            if (!response) return;
+            
+            if (response.ok) {
+                showNotification('Password reset successfully', 'success');
+                closeResetPasswordModal();
+            } else {
+                let detail = 'Failed to reset password';
+                try { const error = await response.json(); detail = error.detail || detail; } catch (_) {}
+                showNotification(detail, 'error');
+            }
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            showNotification('Error resetting password', 'error');
+        }
+    }
+    
+    // Deactivate User Modal
+    function openDeactivateUserModal(userId, username) {
+        document.getElementById('deactivateUserId').value = userId;
+        document.getElementById('deactivateUsername').textContent = username;
+        document.getElementById('deactivateUserModal').style.display = 'flex';
+    }
+    
+    function closeDeactivateUserModal() {
+        document.getElementById('deactivateUserModal').style.display = 'none';
+    }
+    
+    async function submitDeactivateUser() {
+        const userId = document.getElementById('deactivateUserId').value;
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/users/${userId}`, {
+                method: 'DELETE',
+            });
+            
+            if (!response) return;
+            
+            if (response.ok) {
+                showNotification('User deactivated successfully', 'success');
+                closeDeactivateUserModal();
+                await loadUsers();
+            } else {
+                let detail = 'Failed to deactivate user';
+                try { const error = await response.json(); detail = error.detail || detail; } catch (_) {}
+                showNotification(detail, 'error');
+            }
+        } catch (error) {
+            console.error('Error deactivating user:', error);
+            showNotification('Error deactivating user', 'error');
+        }
+    }
+    
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+{% endblock %}

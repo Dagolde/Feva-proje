@@ -1,0 +1,486 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>Data Export</h2>
+    <p>Export enumeration data and audit logs in various formats</p>
+</div>
+
+<!-- Export Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Records</div>
+        <div class="stat-value" id="totalRecords">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Pending Exports</div>
+        <div class="stat-value" id="pendingExports">-</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Completed Today</div>
+        <div class="stat-value" id="completedToday">-</div>
+    </div>
+</div>
+
+<!-- Export Configuration -->
+<div class="card" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 20px;">Create New Export</h3>
+    
+    <form id="exportForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="exportType">Export Type *</label>
+                <select id="exportType" name="entity_type" required>
+                    <option value="">Select export type...</option>
+                    <option value="building">Building Records</option>
+                    <option value="street">Street Records</option>
+                    <option value="audit_log">Audit Log</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="exportFormat">Format *</label>
+                <select id="exportFormat" name="format" required>
+                    <option value="">Select format...</option>
+                    <option value="csv">CSV</option>
+                    <option value="geojson">GeoJSON</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="filterSection" style="display: none;">
+            <h4 style="margin: 24px 0 16px 0; font-size: 16px; color: #333;">Filter Options (Optional)</h4>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="filterLga">LGA</label>
+                    <input type="text" id="filterLga" name="lga" placeholder="e.g., Lagos Island">
+                </div>
+                
+                <div class="form-group">
+                    <label for="filterWard">Ward</label>
+                    <input type="text" id="filterWard" name="ward" placeholder="e.g., Ward 1">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="filterStatus">Record Status</label>
+                    <select id="filterStatus" name="status">
+                        <option value="">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="flagged">Flagged</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="filterDateFrom">Date From</label>
+                    <input type="date" id="filterDateFrom" name="date_from">
+                </div>
+                
+                <div class="form-group">
+                    <label for="filterDateTo">Date To</label>
+                    <input type="date" id="filterDateTo" name="date_to">
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Create Export
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetExportForm()" style="margin-left: 12px;">
+                Reset
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Export Tasks List -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">Export Tasks</h3>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="lastRefreshTime" style="font-size: 12px; color: #666;"></span>
+            <button class="btn btn-secondary" onclick="loadExportTasks()" style="padding: 8px 16px;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <table id="exportTasksTable">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Format</th>
+                <th>Filters</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="exportTasksTableBody">
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: #666;">Loading export tasks...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 6px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #1a6b3c;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-processing {
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .status-completed {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .status-failed {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .filter-summary {
+        font-size: 12px;
+        color: #666;
+    }
+    
+    .filter-item {
+        display: inline-block;
+        background: #f0f0f0;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-right: 4px;
+        margin-bottom: 4px;
+    }
+    
+    .btn-download {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let exportTasks = [];
+    let autoRefreshInterval = null;
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadExportTasks();
+        await loadStatistics();
+        
+        // Setup form submission
+        document.getElementById('exportForm').addEventListener('submit', handleExportSubmit);
+        
+        // Show/hide filter section based on export type
+        document.getElementById('exportType').addEventListener('change', function(e) {
+            const filterSection = document.getElementById('filterSection');
+            const exportFormat = document.getElementById('exportFormat');
+            
+            if (e.target.value === 'audit_log') {
+                filterSection.style.display = 'none';
+                // Audit log only supports CSV
+                exportFormat.innerHTML = '<option value="csv">CSV</option>';
+                exportFormat.value = 'csv';
+            } else if (e.target.value) {
+                filterSection.style.display = 'block';
+                // Building and street support both formats
+                exportFormat.innerHTML = `
+                    <option value="">Select format...</option>
+                    <option value="csv">CSV</option>
+                    <option value="geojson">GeoJSON</option>
+                `;
+            } else {
+                filterSection.style.display = 'none';
+                exportFormat.innerHTML = '<option value="">Select format...</option>';
+            }
+        });
+        
+        // Start auto-refresh every 10 seconds
+        startAutoRefresh();
+    });
+    
+    // Load export tasks from API
+    async function loadExportTasks() {
+        try {
+            const response = await apiRequest('/api/v1/admin/export/tasks');
+            if (response && response.ok) {
+                const data = await response.json();
+                exportTasks = data.items || [];
+                renderExportTasks(exportTasks);
+                updateLastRefreshTime();
+            } else {
+                showNotification('Failed to load export tasks', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading export tasks:', error);
+            showNotification('Error loading export tasks', 'error');
+        }
+    }
+    
+    // Load statistics
+    async function loadStatistics() {
+        try {
+            // Get total records count
+            const recordsResponse = await apiRequest('/api/v1/admin/monitoring/statistics');
+            if (recordsResponse && recordsResponse.ok) {
+                const stats = await recordsResponse.json();
+                const totalRecords = Object.values(stats.records_by_status || {}).reduce((a, b) => a + b, 0);
+                document.getElementById('totalRecords').textContent = totalRecords.toLocaleString();
+            }
+            
+            // Count pending and completed exports
+            const pending = exportTasks.filter(t => t.status === 'pending' || t.status === 'processing').length;
+            const today = new Date().toDateString();
+            const completedToday = exportTasks.filter(t => {
+                if (t.status !== 'completed' || !t.completed_at) return false;
+                return new Date(t.completed_at).toDateString() === today;
+            }).length;
+            
+            document.getElementById('pendingExports').textContent = pending;
+            document.getElementById('completedToday').textContent = completedToday;
+        } catch (error) {
+            console.error('Error loading statistics:', error);
+        }
+    }
+    
+    // Render export tasks table
+    function renderExportTasks(tasks) {
+        const tbody = document.getElementById('exportTasksTableBody');
+        
+        if (tasks.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        No export tasks found. Create your first export above.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        // Sort by created_at descending
+        const sortedTasks = [...tasks].sort((a, b) => 
+            new Date(b.created_at) - new Date(a.created_at)
+        );
+        
+        tbody.innerHTML = sortedTasks.map(task => {
+            const statusClass = `status-${task.status}`;
+            const createdDate = formatDateTime(task.created_at);
+            const completedDate = task.completed_at ? formatDateTime(task.completed_at) : '-';
+            const filterSummary = formatFilterSummary(task.filters);
+            
+            let actions = '';
+            if (task.status === 'completed') {
+                actions = `
+                    <button class="btn btn-download" onclick="downloadExport('${task.id}')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download
+                    </button>
+                `;
+            } else if (task.status === 'failed') {
+                actions = `<span style="color: #c0392b; font-size: 12px;" title="${escapeHtml(task.error_message || 'Unknown error')}">Failed</span>`;
+            } else {
+                actions = `<span class="spinner" style="width: 20px; height: 20px;"></span>`;
+            }
+            
+            return `
+                <tr>
+                    <td>${escapeHtml(task.entity_type)}</td>
+                    <td>${task.format.toUpperCase()}</td>
+                    <td><div class="filter-summary">${filterSummary}</div></td>
+                    <td><span class="status-badge ${statusClass}">${task.status}</span></td>
+                    <td>${createdDate}</td>
+                    <td>${completedDate}</td>
+                    <td>${actions}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Format filter summary
+    function formatFilterSummary(filters) {
+        if (!filters || Object.keys(filters).length === 0) {
+            return '<span style="color: #999;">No filters</span>';
+        }
+        
+        const items = [];
+        if (filters.lga) items.push(`<span class="filter-item">LGA: ${escapeHtml(filters.lga)}</span>`);
+        if (filters.ward) items.push(`<span class="filter-item">Ward: ${escapeHtml(filters.ward)}</span>`);
+        if (filters.status) items.push(`<span class="filter-item">Status: ${escapeHtml(filters.status)}</span>`);
+        if (filters.date_from) items.push(`<span class="filter-item">From: ${filters.date_from}</span>`);
+        if (filters.date_to) items.push(`<span class="filter-item">To: ${filters.date_to}</span>`);
+        
+        return items.join('') || '<span style="color: #999;">No filters</span>';
+    }
+    
+    // Handle export form submission
+    async function handleExportSubmit(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const exportType = formData.get('entity_type');
+        const format = formData.get('format');
+        
+        if (!exportType || !format) {
+            showNotification('Please select export type and format', 'error');
+            return;
+        }
+        
+        // Build filters object
+        const filters = {};
+        if (exportType !== 'audit_log') {
+            if (formData.get('lga')) filters.lga = formData.get('lga');
+            if (formData.get('ward')) filters.ward = formData.get('ward');
+            if (formData.get('status')) filters.status = formData.get('status');
+            if (formData.get('date_from')) filters.date_from = formData.get('date_from');
+            if (formData.get('date_to')) filters.date_to = formData.get('date_to');
+        }
+        
+        const requestBody = {
+            format: format,
+            entity_type: exportType,
+            filters: filters,
+        };
+        
+        try {
+            const response = await apiRequest('/api/v1/admin/export', {
+                method: 'POST',
+                body: JSON.stringify(requestBody),
+            });
+            
+            if (response && response.ok) {
+                const data = await response.json();
+                showNotification('Export task created successfully', 'success');
+                resetExportForm();
+                await loadExportTasks();
+                await loadStatistics();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || 'Failed to create export task', 'error');
+            }
+        } catch (error) {
+            console.error('Error creating export:', error);
+            showNotification('Error creating export task', 'error');
+        }
+    }
+    
+    // Reset export form
+    function resetExportForm() {
+        document.getElementById('exportForm').reset();
+        document.getElementById('filterSection').style.display = 'none';
+        document.getElementById('exportFormat').innerHTML = '<option value="">Select format...</option>';
+    }
+    
+    // Download export file
+    async function downloadExport(taskId) {
+        try {
+            window.location.href = `/api/v1/admin/export/download/${taskId}`;
+            showNotification('Download started', 'success');
+        } catch (error) {
+            console.error('Error downloading export:', error);
+            showNotification('Error downloading export', 'error');
+        }
+    }
+    
+    // Auto-refresh functionality
+    function startAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        
+        autoRefreshInterval = setInterval(async () => {
+            await loadExportTasks();
+            await loadStatistics();
+        }, 10000); // Refresh every 10 seconds
+    }
+    
+    function updateLastRefreshTime() {
+        const timeElement = document.getElementById('lastRefreshTime');
+        if (timeElement) {
+            const now = new Date();
+            timeElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+        }
+    }
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+    });
+</script>
+{% endblock %}

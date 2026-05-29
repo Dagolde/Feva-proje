@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FEVA QA Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f4f6f9; color: #333; }
+    header { background: #1a6b3c; color: #fff; padding: 16px 24px; }
+    header h1 { font-size: 1.4rem; }
+    header small { opacity: 0.8; font-size: 0.85rem; }
+    main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .card .label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: .05em; }
+    .card .value { font-size: 2rem; font-weight: 700; margin-top: 6px; }
+    .card .value.warn { color: #c0392b; }
+    .card .value.ok { color: #1a6b3c; }
+    h2 { font-size: 1.1rem; margin-bottom: 12px; color: #444; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); margin-bottom: 32px; }
+    th { background: #1a6b3c; color: #fff; padding: 10px 14px; text-align: left; font-size: 0.85rem; }
+    td { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .badge.yes { background: #fde8e8; color: #c0392b; }
+    .badge.no  { background: #e8f5e9; color: #1a6b3c; }
+    footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FEVA QA Dashboard</h1>
+    <small>Auto-refreshes every 5 minutes &nbsp;·&nbsp; Last updated: <span id="last-updated">—</span></small>
+  </header>
+
+  <main>
+    <!-- Metrics cards -->
+    <div class="grid" id="metrics-grid">
+      <div class="card">
+        <div class="label">Total Streets</div>
+        <div class="value" id="m-streets">{{ metrics.total_streets }}</div>
+      </div>
+      <div class="card">
+        <div class="label">Total Buildings</div>
+        <div class="value" id="m-buildings">{{ metrics.total_buildings }}</div>
+      </div>
+      <div class="card">
+        <div class="label">Median GPS Accuracy (m)</div>
+        <div class="value {% if metrics.median_gps_accuracy_m > 5 %}warn{% else %}ok{% endif %}" id="m-gps">
+          {{ "%.2f"|format(metrics.median_gps_accuracy_m) }}
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">Boundary Containment</div>
+        <div class="value ok" id="m-boundary">{{ metrics.boundary_containment_pct }}%</div>
+      </div>
+      <div class="card">
+        <div class="label">GPS Accuracy OK</div>
+        <div class="value ok" id="m-gps-ok">{{ metrics.gps_accuracy_ok_pct }}%</div>
+      </div>
+      <div class="card">
+        <div class="label">Valid Photo References</div>
+        <div class="value ok" id="m-photos">{{ metrics.valid_photo_reference_pct }}%</div>
+      </div>
+      <div class="card">
+        <div class="label">Approved Verification</div>
+        <div class="value ok" id="m-approved">{{ metrics.approved_verification_pct }}%</div>
+      </div>
+    </div>
+
+    <!-- Flagged records -->
+    <h2>Flagged Buildings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Building ID</th><th>LGA</th><th>Boundary Flag</th><th>Duplicate Flag</th><th>Postcode Status</th>
+        </tr>
+      </thead>
+      <tbody id="flagged-buildings-body">
+        {% for b in flags.buildings %}
+        <tr>
+          <td>{{ b.building_id }}</td>
+          <td>{{ b.lga }}</td>
+          <td><span class="badge {% if b.boundary_flag %}yes{% else %}no{% endif %}">{{ "Yes" if b.boundary_flag else "No" }}</span></td>
+          <td><span class="badge {% if b.duplicate_flag %}yes{% else %}no{% endif %}">{{ "Yes" if b.duplicate_flag else "No" }}</span></td>
+          <td>{{ b.postcode_status }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#999">No flagged buildings</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Flagged Streets</h2>
+    <table>
+      <thead>
+        <tr><th>Street ID</th><th>LGA</th><th>Boundary Flag</th><th>GPS Flag</th></tr>
+      </thead>
+      <tbody>
+        {% for s in flags.streets %}
+        <tr>
+          <td>{{ s.street_id }}</td>
+          <td>{{ s.lga }}</td>
+          <td><span class="badge {% if s.boundary_flag %}yes{% else %}no{% endif %}">{{ "Yes" if s.boundary_flag else "No" }}</span></td>
+          <td><span class="badge {% if s.gps_accuracy_flag %}yes{% else %}no{% endif %}">{{ "Yes" if s.gps_accuracy_flag else "No" }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" style="text-align:center;color:#999">No flagged streets</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <footer>FEVA &copy; IGSL</footer>
+
+  <script>
+    function updateTimestamp() {
+      document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+    }
+    updateTimestamp();
+
+    // Auto-refresh every 5 minutes by reloading the page.
+    setInterval(() => location.reload(), 5 * 60 * 1000);
+  </script>
+</body>
+</html>

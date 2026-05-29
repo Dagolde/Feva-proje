@@ -1,0 +1,718 @@
+{% extends "admin/layout.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h2>System Configuration</h2>
+    <p>Manage dropdown options and LGA assignments</p>
+</div>
+
+<!-- Configuration Tabs -->
+<div class="tabs">
+    <button class="tab-button active" onclick="switchTab('dropdown')">Dropdown Configuration</button>
+    <button class="tab-button" onclick="switchTab('lga')">LGA Assignments</button>
+</div>
+
+<!-- Dropdown Configuration Tab -->
+<div id="dropdownTab" class="tab-content active">
+    <!-- Category Filter -->
+    <div class="action-bar">
+        <div class="action-bar-left">
+            <label for="categoryFilter" style="margin-right: 8px; font-weight: 600;">Category:</label>
+            <select id="categoryFilter" style="min-width: 200px;">
+                <option value="">All Categories</option>
+                <option value="building_type">Building Type</option>
+                <option value="street_type">Street Type</option>
+                <option value="building_condition">Building Condition</option>
+                <option value="street_condition">Street Condition</option>
+                <option value="surface_type">Surface Type</option>
+            </select>
+        </div>
+        <div class="action-bar-right">
+            <button class="btn" onclick="openCreateDropdownModal()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Dropdown Option
+            </button>
+        </div>
+    </div>
+
+    <!-- Dropdown Options Table -->
+    <div class="card">
+        <table id="dropdownTable">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Value</th>
+                    <th>Label</th>
+                    <th>Sort Order</th>
+                    <th>Version</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="dropdownTableBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 16px; color: #666;">Loading dropdown options...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- LGA Assignments Tab -->
+<div id="lgaTab" class="tab-content">
+    <!-- User Filter -->
+    <div class="action-bar">
+        <div class="action-bar-left">
+            <label for="roleFilter" style="margin-right: 8px; font-weight: 600;">Role:</label>
+            <select id="roleFilter" style="min-width: 200px;">
+                <option value="">All Roles</option>
+                <option value="enumerator">Enumerator</option>
+                <option value="supervisor">Supervisor</option>
+            </select>
+        </div>
+        <div class="action-bar-right">
+            <input type="text" id="userSearchInput" placeholder="Search by username..." style="min-width: 300px;">
+        </div>
+    </div>
+
+    <!-- LGA Assignments Table -->
+    <div class="card">
+        <table id="lgaTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>LGA Assignment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="lgaTableBody">
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 40px;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 16px; color: #666;">Loading user assignments...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Create Dropdown Modal -->
+<div class="modal-overlay" id="createDropdownModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Add Dropdown Option</h3>
+            <button class="modal-close" onclick="closeCreateDropdownModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="createDropdownForm">
+                <div class="form-group">
+                    <label for="createCategory">Category *</label>
+                    <select id="createCategory" name="category" required>
+                        <option value="">Select category...</option>
+                        <option value="building_type">Building Type</option>
+                        <option value="street_type">Street Type</option>
+                        <option value="building_condition">Building Condition</option>
+                        <option value="street_condition">Street Condition</option>
+                        <option value="surface_type">Surface Type</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="createValue">Value *</label>
+                    <input type="text" id="createValue" name="value" required>
+                    <small style="color: #666; font-size: 12px;">Internal value (e.g., "residential")</small>
+                </div>
+                <div class="form-group">
+                    <label for="createLabel">Label *</label>
+                    <input type="text" id="createLabel" name="label" required>
+                    <small style="color: #666; font-size: 12px;">Display label (e.g., "Residential Building")</small>
+                </div>
+                <div class="form-group">
+                    <label for="createSortOrder">Sort Order</label>
+                    <input type="number" id="createSortOrder" name="sort_order" value="0">
+                    <small style="color: #666; font-size: 12px;">Lower numbers appear first</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeCreateDropdownModal()">Cancel</button>
+            <button class="btn" onclick="submitCreateDropdown()">Add Option</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Dropdown Modal -->
+<div class="modal-overlay" id="editDropdownModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Edit Dropdown Option</h3>
+            <button class="modal-close" onclick="closeEditDropdownModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="editDropdownForm">
+                <input type="hidden" id="editDropdownId">
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="editCategory" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label>Value</label>
+                    <input type="text" id="editValue" disabled style="background: #f0f0f0;">
+                    <small style="color: #666; font-size: 12px;">Value cannot be changed</small>
+                </div>
+                <div class="form-group">
+                    <label for="editLabel">Label *</label>
+                    <input type="text" id="editLabel" name="label" required>
+                </div>
+                <div class="form-group">
+                    <label for="editSortOrder">Sort Order</label>
+                    <input type="number" id="editSortOrder" name="sort_order">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeEditDropdownModal()">Cancel</button>
+            <button class="btn" onclick="submitEditDropdown()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Dropdown Confirmation Modal -->
+<div class="modal-overlay" id="deleteDropdownModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Delete Dropdown Option</h3>
+            <button class="modal-close" onclick="closeDeleteDropdownModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="deleteDropdownId">
+            <p>Are you sure you want to delete this dropdown option?</p>
+            <p style="margin-top: 12px;"><strong>Category:</strong> <span id="deleteCategory"></span></p>
+            <p><strong>Value:</strong> <span id="deleteValue"></span></p>
+            <p><strong>Label:</strong> <span id="deleteLabel"></span></p>
+            <p style="color: #c0392b; margin-top: 12px;">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeDeleteDropdownModal()">Cancel</button>
+            <button class="btn btn-danger" onclick="submitDeleteDropdown()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit LGA Assignment Modal -->
+<div class="modal-overlay" id="editLgaModal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Edit LGA Assignment</h3>
+            <button class="modal-close" onclick="closeEditLgaModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="editLgaForm">
+                <input type="hidden" id="editLgaUserId">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="editLgaUsername" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <input type="text" id="editLgaRole" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label for="editLgaAssignment">LGA Assignment *</label>
+                    <input type="text" id="editLgaAssignment" name="lga_assignment" placeholder="Comma-separated LGA names" required>
+                    <small style="color: #666; font-size: 12px;">Example: Lagos Island, Ikeja, Surulere</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeEditLgaModal()">Cancel</button>
+            <button class="btn" onclick="submitEditLga()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .tab-button {
+        padding: 12px 24px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-size: 14px;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .tab-button:hover {
+        color: #333;
+        background: #f8f9fa;
+    }
+    
+    .tab-button.active {
+        color: #1a6b3c;
+        border-bottom-color: #1a6b3c;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .action-bar-left,
+    .action-bar-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .dropdown-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-icon {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .tabs {
+            overflow-x: auto;
+        }
+        
+        .action-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .action-bar-left,
+        .action-bar-right {
+            width: 100%;
+        }
+        
+        #categoryFilter,
+        #roleFilter,
+        #userSearchInput {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="/static/js/common.js"></script>
+<script>
+    let allDropdownOptions = [];
+    let allUsers = [];
+    let roles = [];
+    let currentTab = 'dropdown';
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadRoles();
+        await loadDropdownOptions();
+        await loadUsers();
+        
+        // Setup filters
+        document.getElementById('categoryFilter').addEventListener('change', function(e) {
+            filterDropdownOptions(e.target.value);
+        });
+        
+        document.getElementById('roleFilter').addEventListener('change', function(e) {
+            filterUsers(e.target.value, document.getElementById('userSearchInput').value);
+        });
+        
+        document.getElementById('userSearchInput').addEventListener('input', function(e) {
+            filterUsers(document.getElementById('roleFilter').value, e.target.value);
+        });
+    });
+    
+    // Tab switching
+    function switchTab(tab) {
+        currentTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        if (tab === 'dropdown') {
+            document.getElementById('dropdownTab').classList.add('active');
+        } else if (tab === 'lga') {
+            document.getElementById('lgaTab').classList.add('active');
+        }
+    }
+    
+    // Load roles
+    async function loadRoles() {
+        try {
+            const response = await apiRequest('/api/v1/admin/roles');
+            if (response && response.ok) {
+                roles = await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading roles:', error);
+        }
+    }
+    
+    // Load dropdown options
+    async function loadDropdownOptions() {
+        try {
+            const response = await apiRequest('/api/v1/admin/dropdown-config');
+            if (response && response.ok) {
+                allDropdownOptions = await response.json();
+                renderDropdownOptions(allDropdownOptions);
+            } else {
+                showNotification('Failed to load dropdown options', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading dropdown options:', error);
+            showNotification('Error loading dropdown options', 'error');
+        }
+    }
+    
+    // Render dropdown options table
+    function renderDropdownOptions(options) {
+        const tbody = document.getElementById('dropdownTableBody');
+        
+        if (options.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                        No dropdown options found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = options.map(option => `
+            <tr>
+                <td>${escapeHtml(option.category)}</td>
+                <td>${escapeHtml(option.value)}</td>
+                <td>${escapeHtml(option.label)}</td>
+                <td>${option.sort_order}</td>
+                <td>${option.version}</td>
+                <td>
+                    <div class="dropdown-actions">
+                        <button class="btn btn-secondary btn-icon" onclick="openEditDropdownModal(${option.id})" title="Edit">
+                            Edit
+                        </button>
+                        <button class="btn btn-danger btn-icon" onclick="openDeleteDropdownModal(${option.id})" title="Delete">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    // Filter dropdown options by category
+    function filterDropdownOptions(category) {
+        if (!category) {
+            renderDropdownOptions(allDropdownOptions);
+            return;
+        }
+        
+        const filtered = allDropdownOptions.filter(option => option.category === category);
+        renderDropdownOptions(filtered);
+    }
+    
+    // Create Dropdown Modal
+    function openCreateDropdownModal() {
+        document.getElementById('createDropdownModal').style.display = 'flex';
+        document.getElementById('createDropdownForm').reset();
+    }
+    
+    function closeCreateDropdownModal() {
+        document.getElementById('createDropdownModal').style.display = 'none';
+    }
+    
+    async function submitCreateDropdown() {
+        const form = document.getElementById('createDropdownForm');
+        const formData = new FormData(form);
+        
+        const data = {
+            category: formData.get('category'),
+            value: formData.get('value'),
+            label: formData.get('label'),
+            sort_order: parseInt(formData.get('sort_order')) || 0,
+        };
+        
+        try {
+            const response = await apiRequest('/api/v1/admin/dropdown-config', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+            
+            if (response && response.ok) {
+                showNotification('Dropdown option created successfully', 'success');
+                closeCreateDropdownModal();
+                await loadDropdownOptions();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || 'Failed to create dropdown option', 'error');
+            }
+        } catch (error) {
+            console.error('Error creating dropdown option:', error);
+            showNotification('Error creating dropdown option', 'error');
+        }
+    }
+    
+    // Edit Dropdown Modal
+    function openEditDropdownModal(id) {
+        const option = allDropdownOptions.find(o => o.id === id);
+        if (!option) return;
+        
+        document.getElementById('editDropdownId').value = option.id;
+        document.getElementById('editCategory').value = option.category;
+        document.getElementById('editValue').value = option.value;
+        document.getElementById('editLabel').value = option.label;
+        document.getElementById('editSortOrder').value = option.sort_order;
+        
+        document.getElementById('editDropdownModal').style.display = 'flex';
+    }
+    
+    function closeEditDropdownModal() {
+        document.getElementById('editDropdownModal').style.display = 'none';
+    }
+    
+    async function submitEditDropdown() {
+        const id = document.getElementById('editDropdownId').value;
+        const label = document.getElementById('editLabel').value;
+        const sortOrder = parseInt(document.getElementById('editSortOrder').value);
+        
+        const data = {
+            label: label,
+            sort_order: sortOrder,
+        };
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/dropdown-config/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(data),
+            });
+            
+            if (response && response.ok) {
+                showNotification('Dropdown option updated successfully', 'success');
+                closeEditDropdownModal();
+                await loadDropdownOptions();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || 'Failed to update dropdown option', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating dropdown option:', error);
+            showNotification('Error updating dropdown option', 'error');
+        }
+    }
+    
+    // Delete Dropdown Modal
+    function openDeleteDropdownModal(id) {
+        const option = allDropdownOptions.find(o => o.id === id);
+        if (!option) return;
+        
+        document.getElementById('deleteDropdownId').value = option.id;
+        document.getElementById('deleteCategory').textContent = option.category;
+        document.getElementById('deleteValue').textContent = option.value;
+        document.getElementById('deleteLabel').textContent = option.label;
+        
+        document.getElementById('deleteDropdownModal').style.display = 'flex';
+    }
+    
+    function closeDeleteDropdownModal() {
+        document.getElementById('deleteDropdownModal').style.display = 'none';
+    }
+    
+    async function submitDeleteDropdown() {
+        const id = document.getElementById('deleteDropdownId').value;
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/dropdown-config/${id}`, {
+                method: 'DELETE',
+            });
+            
+            if (response && response.ok) {
+                showNotification('Dropdown option deleted successfully', 'success');
+                closeDeleteDropdownModal();
+                await loadDropdownOptions();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || 'Failed to delete dropdown option', 'error');
+            }
+        } catch (error) {
+            console.error('Error deleting dropdown option:', error);
+            showNotification('Error deleting dropdown option', 'error');
+        }
+    }
+    
+    // Load users for LGA assignment
+    async function loadUsers() {
+        try {
+            const response = await apiRequest('/api/v1/admin/users?page=1&page_size=1000');
+            if (response && response.ok) {
+                const data = await response.json();
+                allUsers = data.items;
+                renderUsers(allUsers);
+            } else {
+                showNotification('Failed to load users', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading users:', error);
+            showNotification('Error loading users', 'error');
+        }
+    }
+    
+    // Render users table for LGA assignment
+    function renderUsers(users) {
+        const tbody = document.getElementById('lgaTableBody');
+        
+        // Filter to only show enumerators and supervisors
+        const fieldUsers = users.filter(user => {
+            const role = roles.find(r => r.id === user.role_id);
+            return role && (role.name === 'enumerator' || role.name === 'supervisor');
+        });
+        
+        if (fieldUsers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 40px; color: #666;">
+                        No field users found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = fieldUsers.map(user => {
+            const role = roles.find(r => r.id === user.role_id);
+            const roleName = role ? role.name : 'Unknown';
+            const lgaDisplay = user.lga_assignment && user.lga_assignment.length > 0 
+                ? user.lga_assignment.join(', ') 
+                : '-';
+            
+            return `
+                <tr>
+                    <td>${escapeHtml(user.username)}</td>
+                    <td>${escapeHtml(roleName)}</td>
+                    <td>${escapeHtml(lgaDisplay)}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-icon" onclick="openEditLgaModal('${user.id}')" title="Edit LGA Assignment">
+                            Edit Assignment
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Filter users by role and search term
+    function filterUsers(roleFilter, searchTerm) {
+        let filtered = allUsers.filter(user => {
+            const role = roles.find(r => r.id === user.role_id);
+            return role && (role.name === 'enumerator' || role.name === 'supervisor');
+        });
+        
+        if (roleFilter) {
+            filtered = filtered.filter(user => {
+                const role = roles.find(r => r.id === user.role_id);
+                return role && role.name === roleFilter;
+            });
+        }
+        
+        if (searchTerm) {
+            filtered = filtered.filter(user => 
+                user.username.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        
+        renderUsers(filtered);
+    }
+    
+    // Edit LGA Assignment Modal
+    function openEditLgaModal(userId) {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) return;
+        
+        const role = roles.find(r => r.id === user.role_id);
+        const roleName = role ? role.name : 'Unknown';
+        
+        document.getElementById('editLgaUserId').value = user.id;
+        document.getElementById('editLgaUsername').value = user.username;
+        document.getElementById('editLgaRole').value = roleName;
+        document.getElementById('editLgaAssignment').value = user.lga_assignment ? user.lga_assignment.join(', ') : '';
+        
+        document.getElementById('editLgaModal').style.display = 'flex';
+    }
+    
+    function closeEditLgaModal() {
+        document.getElementById('editLgaModal').style.display = 'none';
+    }
+    
+    async function submitEditLga() {
+        const userId = document.getElementById('editLgaUserId').value;
+        const lgaInput = document.getElementById('editLgaAssignment').value;
+        const lgaAssignment = lgaInput ? lgaInput.split(',').map(s => s.trim()).filter(s => s) : [];
+        
+        const data = {
+            lga_assignment: lgaAssignment,
+        };
+        
+        try {
+            const response = await apiRequest(`/api/v1/admin/users/${userId}`, {
+                method: 'PATCH',
+                body: JSON.stringify(data),
+            });
+            
+            if (response && response.ok) {
+                showNotification('LGA assignment updated successfully', 'success');
+                closeEditLgaModal();
+                await loadUsers();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || 'Failed to update LGA assignment', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating LGA assignment:', error);
+            showNotification('Error updating LGA assignment', 'error');
+        }
+    }
+    
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+{% endblock %}

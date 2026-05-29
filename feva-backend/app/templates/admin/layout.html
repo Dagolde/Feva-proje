@@ -1,0 +1,536 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block header_title %}Admin Dashboard{% endblock %}
+{% block header_subtitle %}System Administration and Management{% endblock %}
+
+{% block extra_styles %}
+<style>
+    /* Admin Dashboard Layout Styles */
+    .dashboard-container {
+        display: flex;
+        min-height: calc(100vh - 120px);
+        gap: 0;
+    }
+    
+    /* Sidebar Navigation */
+    .sidebar {
+        width: 250px;
+        background: #fff;
+        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+        padding: 20px 0;
+        flex-shrink: 0;
+    }
+    
+    .sidebar nav {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 12px 24px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+        border-left: 3px solid transparent;
+    }
+    
+    .sidebar a:hover {
+        background: #f4f6f9;
+        color: #1a6b3c;
+    }
+    
+    .sidebar a.active {
+        background: #e8f5e9;
+        color: #1a6b3c;
+        border-left-color: #1a6b3c;
+    }
+    
+    .sidebar a svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 12px;
+    }
+    
+    .sidebar .nav-section {
+        padding: 8px 24px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #999;
+        letter-spacing: 0.5px;
+        margin-top: 16px;
+    }
+    
+    .sidebar .nav-section:first-child {
+        margin-top: 0;
+    }
+    
+    /* User Info Section */
+    .user-info {
+        padding: 16px 24px;
+        border-top: 1px solid #eee;
+        margin-top: auto;
+    }
+    
+    .user-info .user-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    
+    .user-info .user-role {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 12px;
+    }
+    
+    .user-info .btn-logout {
+        width: 100%;
+        padding: 8px 16px;
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    .user-info .btn-logout:hover {
+        background: #a93226;
+    }
+    
+    /* Main Content Area */
+    .dashboard-content {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+    }
+    
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        background: #1a6b3c;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mobile-menu-toggle svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* Responsive Design - Tablet */
+    @media (max-width: 1024px) {
+        .sidebar {
+            width: 220px;
+        }
+        
+        .sidebar a {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+        
+        .sidebar a svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+        }
+        
+        .dashboard-content {
+            padding: 20px;
+        }
+    }
+    
+    /* Responsive Design - Mobile */
+    @media (max-width: 768px) {
+        .dashboard-container {
+            flex-direction: column;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            z-index: 999;
+            transition: left 0.3s;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .mobile-menu-toggle {
+            display: flex;
+        }
+        
+        .dashboard-content {
+            padding: 16px;
+            width: 100%;
+        }
+        
+        /* Overlay when menu is open */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+    }
+    
+    /* Page Header */
+    .page-header {
+        margin-bottom: 24px;
+    }
+    
+    .page-header h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .page-header p {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .stat-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card .stat-label {
+        font-size: 12px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a6b3c;
+    }
+    
+    .stat-card .stat-change {
+        font-size: 12px;
+        margin-top: 8px;
+    }
+    
+    .stat-card .stat-change.positive {
+        color: #27ae60;
+    }
+    
+    .stat-card .stat-change.negative {
+        color: #c0392b;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .action-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        color: #333;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .action-card .icon {
+        width: 48px;
+        height: 48px;
+        background: #e8f5e9;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .action-card .icon svg {
+        width: 24px;
+        height: 24px;
+        color: #1a6b3c;
+    }
+    
+    .action-card .content h3 {
+        font-size: 16px;
+        margin-bottom: 4px;
+        color: #333;
+    }
+    
+    .action-card .content p {
+        font-size: 13px;
+        color: #666;
+        margin: 0;
+    }
+    
+    /* Activity List */
+    .activity-list {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .activity-list h3 {
+        font-size: 16px;
+        margin-bottom: 16px;
+        color: #333;
+    }
+    
+    .activity-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-item .activity-text {
+        font-size: 14px;
+        color: #333;
+    }
+    
+    .activity-item .activity-time {
+        font-size: 12px;
+        color: #999;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <nav>
+            <div class="nav-section">Main</div>
+            <a href="/admin/" class="nav-link" data-page="home">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Dashboard
+            </a>
+            
+            <div class="nav-section">User Management</div>
+            <a href="/admin/users" class="nav-link" data-page="users">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                Users
+            </a>
+            <a href="/admin/roles" class="nav-link" data-page="roles">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                Roles
+            </a>
+            
+            <div class="nav-section">System Configuration</div>
+            <a href="/admin/config" class="nav-link" data-page="config">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Configuration
+            </a>
+            <a href="/admin/shapefiles" class="nav-link" data-page="shapefiles">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                </svg>
+                Shapefiles
+            </a>
+            
+            <div class="nav-section">QA</div>
+            <a href="/qa/flagged" class="nav-link" data-page="flagged">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                </svg>
+                Flagged Records
+            </a>
+
+            <div class="nav-section">Data & Monitoring</div>
+            <a href="/admin/export" class="nav-link" data-page="export">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Export Data
+            </a>
+            <a href="/admin/monitoring" class="nav-link" data-page="monitoring">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Monitoring
+            </a>
+            <a href="/admin/audit" class="nav-link" data-page="audit">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Audit Log
+            </a>
+        </nav>
+        
+        <!-- User Info Section -->
+        <div class="user-info">
+            <div class="user-name">{{ user.username if user else 'Admin' }}</div>
+            <div class="user-role">{{ user.role.name if user and user.role else 'Administrator' }}</div>
+            <button class="btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
+    </aside>
+    
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+    
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        {% block dashboard_content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </div>
+</div>
+
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+</button>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/common.js"></script>
+<script>
+    // Set active navigation link based on current page
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    });
+    
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+    
+    // Handle logout
+    async function handleLogout() {
+        try {
+            await fetch('/api/v1/auth/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ refresh_token: null }),
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            // Always redirect to login regardless of server response
+            localStorage.removeItem('access_token');
+            window.location.href = '/login';
+        }
+    }
+    
+    // Auto-refresh functionality for real-time updates (30 seconds for admin dashboard)
+    let autoRefreshInterval = null;
+    
+    function startAutoRefresh(refreshFunction, intervalSeconds = 30) {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        
+        autoRefreshInterval = setInterval(() => {
+            refreshFunction();
+            updateLastRefreshTime();
+        }, intervalSeconds * 1000);
+    }
+    
+    function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+        }
+    }
+    
+    function updateLastRefreshTime() {
+        const timeElement = document.getElementById('lastRefreshTime');
+        if (timeElement) {
+            const now = new Date();
+            timeElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+        }
+    }
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        stopAutoRefresh();
+    });
+</script>
+{% endblock %}
